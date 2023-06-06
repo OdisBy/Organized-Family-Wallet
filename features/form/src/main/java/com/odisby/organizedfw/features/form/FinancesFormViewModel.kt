@@ -27,7 +27,7 @@ class FinancesFormViewModel @Inject constructor(
      * @param amount: How much spent or earned
      * @param financeType: Expense or Budget
      */
-    fun addFinance(name: String, date: LocalDate, description: String, amount: Double, recurrent: Boolean, onResult: (Boolean) -> Unit) = viewModelScope.launch{
+    fun addFinance(name: String, date: Long, description: String, amount: Double, recurrent: Boolean, onResult: (Boolean) -> Unit) = viewModelScope.launch{
         Log.d(TAG, "Enter launch method, amount = $amount.")
         try {
             val userId = usersRepository.getMainUser()!!.id

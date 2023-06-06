@@ -71,17 +71,17 @@ internal class FinanceRepositoryImpl @Inject constructor(
     override suspend fun add(
         userId: String,
         name: String,
-        date: LocalDate,
+        date: Long,
         description: String,
         amount: Double,
         recurrent: Boolean
     ) {
-        val localDateToLong = date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+//        val localDateToLong = date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
         val finance = TransactionDomain(
             id = UUID.randomUUID().toString(),
             userId = userId,
             title = name,
-            date = localDateToLong,
+            date = date,
             description = description,
             amount = amount,
             recurrent = recurrent

@@ -78,7 +78,7 @@ class ExpenseFormFragment : Fragment() {
         // Get values from input to save
         val expenseName = binding.nameOfExpenseField.editText?.text.toString()
         val typeOfExpense = binding.typeOfExpenseTextView.text.toString()
-        val dateOfExpense = localDate
+        val dateOfExpense = Date().time
         val amount = binding.amountSpentField.editText?.text.toString().toDouble()
         val isRecurrent = binding.recurrentCheck.isChecked
 //        val isCouple = binding.coupleFinanceCheck.isChecked

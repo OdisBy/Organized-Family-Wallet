@@ -27,6 +27,9 @@ dependencies {
     kapt libs.hilt.compiler
 
     implementation libs.bundles.navigation
+
+    testImplementation libs.junit
+    testImplementation libs.google.truth
 }
 
 // Allow references to generated code
