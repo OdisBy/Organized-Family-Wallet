@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dont_have_account">Não tem uma conta ainda?</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Senha</string>
+    <string name="sign_in_email">Entrar com Email</string>
+    <string name="email_password_wrong">Email ou senha invalidos!</string>
+    <string name="description_your_username">Nome de usuário</string>
+    <string name="description_your_password">Sua senha</string>
+    <string name="description_your_email">Seu email</string>
+    <string name="sign_up">Cadastre-se!</string>
+    <string name="other_login_way">Outros Métodos de Login</string>
+    <string name="login_google">Login Com Google</string>
+    <string name="login_anonymous">Login Anônimo</string>
+    <string name="login_phone_number">Login Com Telefone</string>
+    <string name="sign_up_text">Cadastro</string>
+    <string name="confirm_password">Confirmar a senha</string>
+    <string name="sign_up_button">Registrar</string>
+    <string name="other_register_way">Outros Métodos de Registro</string>
+    <string name="sign_up_google">Registrar Com Google</string>
+    <string name="sign_up_number">Registrar Com Telefone</string>
+    <string name="hint_confirm_password">Confirme sua senha</string>
+
+
+    // Tooltips
+    <string name="username_tooltip">Nome que será mostrado aos usuários do grupo</string>
+    <string name="invite_code_tooltip">Caso queira entrar em um grupo adicione o código de convite do grupo</string>
+    <string name="avatar_tooltip">Foto do perfil</string>
+</resources>

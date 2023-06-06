@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Organized.Settings" parent="Theme.Organized">
+
+        <!--        Change AndroidX Preferences Theme to add a toolbar-->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlayStyle</item>
+        <!-- Title of preferences -->
+        <item name="android:textColorPrimary">@color/text_color</item>
+        <!-- Text of preferences -->
+        <item name="android:textColorSecondary">@color/text_color_second</item>
+    </style>
+
+    <style name="PreferenceThemeOverlayStyle" parent="@style/PreferenceThemeOverlay">
+        <item name="android:layout">@layout/custom_pref</item>
+    </style>
+</resources>

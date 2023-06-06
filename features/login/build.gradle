@@ -1,0 +1,49 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+}
+
+android {
+    namespace 'com.odisby.organizedfw.features.login'
+    compileSdk rootProject.ext.sdkVersion
+
+    defaultConfig {
+        minSdk rootProject.ext.minVersion
+        targetSdk rootProject.ext.targetVersion
+
+        testInstrumentationRunner "com.odisby.organizedfw.features.login.HiltTestRunner"
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation project(":core:data")
+    implementation project(":core:ui")
+
+    implementation libs.google.services.auth
+    implementation libs.hilt.android
+
+    kapt libs.hilt.compiler
+
+    implementation libs.bundles.navigation
+
+    implementation libs.androidx.runner
+
+    testImplementation libs.junit
+    testImplementation libs.google.truth
+
+//    androidTestImplementation libs.mockito.kotlin
+    implementation libs.mockito.core
+    androidTestImplementation("androidx.navigation:navigation-testing:2.5.3")
+    androidTestImplementation libs.mockito.android
+    androidTestImplementation libs.androidx.espresso.core
+    androidTestImplementation libs.kotlinx.coroutines.test
+    androidTestImplementation libs.hilt.testing.android
+    kaptAndroidTest libs.hilt.testing.compiler
+    debugImplementation libs.fragment.testing
+}

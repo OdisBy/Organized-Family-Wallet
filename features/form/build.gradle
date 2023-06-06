@@ -1,0 +1,30 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+}
+
+android {
+    namespace 'com.odisby.organizedfw.features.form'
+    compileSdk rootProject.ext.sdkVersion
+
+    defaultConfig {
+        minSdk rootProject.ext.minVersion
+        targetSdk rootProject.ext.targetVersion
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation project(":core:ui")
+    implementation project(":core:data")
+
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
+
+    implementation libs.bundles.navigation
+}

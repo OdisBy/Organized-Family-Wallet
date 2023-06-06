@@ -1,0 +1,18 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.odisby.organizedfw.core.ui'
+    compileSdk rootProject.ext.sdkVersion
+    defaultConfig {
+        minSdk rootProject.ext.minVersion
+        targetSdk rootProject.ext.targetVersion
+    }
+}
+
+dependencies {
+    implementation libs.material
+    implementation libs.androidx.splash.screen
+}

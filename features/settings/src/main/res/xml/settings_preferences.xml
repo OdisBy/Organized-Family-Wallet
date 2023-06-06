@@ -1,0 +1,37 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+<!--    Notification -->
+    <!--        Open a menu with the options (All notifications, your notifications, any notification)-->
+    <ListPreference
+        app:key="notification_key"
+        app:title="Selecionar notificações"
+        android:summary="%s"
+        android:entries="@array/notifications_preference"
+        android:entryValues="@array/notifications_preference_values"
+        android:defaultValue="1"
+        >
+
+    </ListPreference>
+
+    <SwitchPreference
+        app:key="emailNotification_key"
+        app:title="Enviar notificações para o E-mail"
+        android:enabled="false"/>
+    <Preference
+        app:key="share_key"
+        app:title="Compartilhar o aplicativo"
+        app:summary="Link do GitHub com a versão mais recente">
+    </Preference>
+    <Preference
+        app:key="issues_key"
+        app:title="Reportar um problema"
+        app:summary="Reportar um problema técnico do aplicativo aos desenvolvedores">
+    </Preference>
+
+    <Preference
+        app:key="logout_key"
+        app:title="Sair do aplicativo"
+        />
+
+</PreferenceScreen>

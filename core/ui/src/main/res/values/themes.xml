@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Organized" parent="Theme.Material3.DayNight">
+        <item name="colorAccent">@color/secondary_color</item>
+        <item name="bottomSheetDialogTheme">@style/Widget.Organized.BottomSheet</item>
+        <!--Remove default actionbar-->
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Theme.Organized.Starting" parent="Theme.SplashScreen">
+        <!-- Set the splash screen background, animated icon, and animation duration. -->
+        <item name="windowSplashScreenBackground">@color/colorPrimary</item>
+
+        <!-- Use windowSplashScreenAnimatedIcon to add either a drawable or an
+             animated drawable. One of these is required. -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/icon_organized</item>
+
+        <!-- Set the theme of the Activity that directly follows your splash screen. -->
+        <!-- Required -->
+        <item name="postSplashScreenTheme">@style/Theme.Organized</item>
+    </style>
+
+    <style name="Widget.Organized.BottomSheet" parent="Widget.Material3.BottomSheet">
+        <item name="backgroundTint">@color/proton_dark_gray</item>
+    </style>
+
+    <style name="Widget.Design.BottomNavigationView" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorOnSurfaceVariant">@color/black</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.Organized.Icon" parent="Theme.Material3.DayNight">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">30%</item>
+    </style>
+
+    <style name="Theme.Organized.Button.Outline.Icon.White" parent="Widget.Material3.Button.OutlinedButton.Icon">
+        <item name="boxStrokeColor">@color/white</item>
+        <item name="android:textColorHint">@color/text_input_selector</item>
+        <item name="hintTextColor">@color/white</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="endIconTint">@color/text_input_selector</item>
+    </style>
+
+    <style name="Theme.Organized.TextInputLayout.OutlineBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/text_input_selector</item>
+        <item name="android:textColorHint">@color/text_input_selector</item>
+        <item name="hintTextColor">@color/white</item>
+        <item name="endIconTint">@color/text_input_selector</item>
+    </style>
+
+    <style name="Theme.Organized.TextInputLayout.OutlineBox.Dark" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/black</item>
+        <item name="android:textColorHint">@color/black</item>
+        <item name="hintTextColor">@color/black</item>
+        <item name="endIconTint">@color/black</item>
+    </style>
+
+    <style name="Theme.Organized.TextInputLayout.OutlineBox.White" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/text_input_selector</item>
+        <item name="android:textColorHint">@color/text_input_selector</item>
+        <item name="hintTextColor">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="endIconTint">@color/white</item>
+    </style>
+
+    <style name="Theme.Organized.Button.Login.White" parent="ShapeAppearanceOverlay.Material3.Button">
+        <item name="backgroundTint">@color/button_selector</item>
+        <item name="backgroundTintMode">src_over</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Theme.Organized.TextInputLayout.OutlineBox.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@color/text_input_selector</item>
+        <item name="android:textColorHint">@color/text_input_selector</item>
+        <item name="hintTextColor">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="endIconTint">@color/text_input_selector</item>
+    </style>
+
+    <style name="Organized.FloatingActionButton.Primary" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="tint">@color/black</item>
+        <item name="backgroundTint">@color/accent_color</item>
+    </style>
+
+    <style name="PopupMenu">
+        <item name="android:itemBackground">@color/white</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="Theme.Organized.Button.Icon" parent="Widget.Material3.Button.Icon">
+        <item name="backgroundTint">@color/secondary_color</item>
+    </style>
+
+    <style name="Theme.Organized.TextButton" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/text_input_selector</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+
+    <style name="Theme.Organized.DialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="colorAccent">@color/secondary_color</item>
+    </style>
+
+    <style name="Theme.Organized.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+</resources>

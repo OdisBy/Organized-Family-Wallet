@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#16141C</color>
+    <color name="colorSecondary">#312853</color>
+    <color name="primary_color">#140E34</color>
+    <color name="secondary_color">#917FFB</color>
+    <color name="accent_color">#FCF0BE</color>
+    <color name="text_color">#FFFFFF</color>
+    <color name="text_color_second">#C0C0C0</color>
+    <color name="accent_text">#FCB45C</color>
+    <color name="text_color_error">#EF0000</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="medium_purple">#522FA4</color>
+    <color name="purple_light">#BAAEFF</color>
+
+    <color name="secondary_contrast">#312C52</color>
+    
+    <color name="gray_dark_1">#10121C</color>
+    <color name="gray_light_1">#21242E</color>
+    <color name="medium_purple_test">#9A5CD6</color>
+
+    <color name="test_1">#4F1F87</color>
+
+    <color name="proton_dark_gray">#16141C</color>
+    <color name="proton_light_gray">#1E1C26</color>
+    
+    <color name="proton_light_purple">#8A6EFF</color>
+    <color name="proton_dark_purple">#312853</color>
+
+    <color name="vine_red">#53141A</color>
+</resources>

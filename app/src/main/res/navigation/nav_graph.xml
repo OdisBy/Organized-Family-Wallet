@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.odisby.organizedfw.features.login.login_screen.LoginFragment"
+        android:label="Login Fragment"
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@id/action_login_to_sign_up"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.odisby.organizedfw.features.login.signup_screen.SignUpFragment"
+        android:label="SignUpFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerInformationFragment"
+        android:name="com.odisby.organizedfw.features.login.register_information_screen.RegisterInformationFragment"
+        android:label="RegisterInformationFragment">
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="organized-app://com.odisby.organizedfw/register_information" />
+        <action
+            android:id="@id/action_registerInformationFragment_to_app_graph"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"
+            app:destination="@id/app_graph" />
+    </fragment>
+
+    <navigation
+        android:id="@+id/app_graph"
+        app:startDestination="@id/homeFragment"
+        >
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="organized-app://com.odisby.organizedfw/app_graph" />
+        <fragment
+            android:id="@+id/homeFragment"
+            android:name="com.odisby.organizedfw.features.home.HomeFragment"
+            android:label="Home Fragment"
+            tools:layout="@layout/fragment_home">
+            <action
+                android:id="@id/action_homeFragment_to_expenseForm"
+                app:destination="@id/expenseFormFragment" />
+
+            <action
+                android:id="@id/action_homeFragment_to_incomeForm"
+                app:destination="@id/incomeFormFragment" />
+            <action
+                android:id="@id/action_homeFragment_to_settingsFragment"
+                app:destination="@id/settingsFragment" />
+            <deepLink
+                android:id="@+id/deepLink"
+                app:uri="organized-app://com.odisby.organizedfw/home" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/expenseFormFragment"
+            android:name="com.odisby.organizedfw.features.form.ExpenseFormFragment"
+            android:label="@string/title_finance_form"
+            tools:layout="@layout/fragment_expense_form" >
+            <action
+                android:id="@id/action_expenseFormFragment_to_incomeFormFragment"
+                app:destination="@id/incomeFormFragment"
+                app:popUpTo="@id/homeFragment" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/incomeFormFragment"
+            android:name="com.odisby.organizedfw.features.form.IncomeFormFragment"
+            android:label="Formulário de receita"
+            tools:layout="@layout/fragment_income_form" >
+            <action
+                android:id="@id/action_incomeFormFragment_to_expenseFormFragment"
+                app:destination="@id/expenseFormFragment"
+                app:popUpTo="@id/homeFragment"/>
+        </fragment>
+
+        <fragment
+            android:id="@+id/settingsFragment"
+            android:name="com.odisby.organizedfw.features.settings.SettingsFragment"
+            android:label="SettingsFragment"
+            tools:layout="@layout/custom_pref"/>
+    </navigation>
+
+</navigation>

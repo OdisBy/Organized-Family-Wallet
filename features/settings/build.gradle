@@ -1,0 +1,32 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+}
+
+android {
+    namespace 'com.odisby.organizedfw.features.settings'
+    compileSdk rootProject.ext.sdkVersion
+
+    defaultConfig {
+        minSdk rootProject.ext.minVersion
+        targetSdk rootProject.ext.targetVersion
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation project(":core:ui")
+
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
+
+    implementation libs.bundles.navigation
+    implementation libs.androidx.datastore
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.preference.ktx
+}

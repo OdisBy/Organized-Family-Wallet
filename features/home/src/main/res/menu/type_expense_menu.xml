@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/billOption"
+        android:title="Conta" />
+    <item android:id="@+id/restaurantOption"
+        android:title="Restaurante" />
+    <item android:id="@+id/shoppingOption"
+        android:title="Compras" />
+    <item android:id="@+id/othersOption"
+        android:title="Outros" />
+</menu>

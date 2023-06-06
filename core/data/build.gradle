@@ -1,0 +1,35 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+}
+
+android {
+    namespace 'com.odisby.organizedfw.core.data'
+    compileSdk rootProject.ext.sdkVersion
+
+    defaultConfig {
+        minSdk rootProject.ext.minVersion
+        targetSdk rootProject.ext.targetVersion
+    }
+    
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation libs.hilt.android
+    implementation libs.firebase.auth
+    implementation libs.firebase.firestore
+    implementation libs.firebase.storage
+    kapt libs.hilt.compiler
+
+    // TODO REMOVER
+    implementation libs.androidx.room.ktx
+    kapt libs.androidx.room.compiler
+    androidTestImplementation libs.hilt.testing.android
+    kaptAndroidTest libs.hilt.testing.compiler
+    debugImplementation libs.fragment.testing
+}

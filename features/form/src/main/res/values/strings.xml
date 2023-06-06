@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="typesOfExpenses">
+        <item>Conta</item>
+        <item>Restaurante</item>
+        <item>Compras</item>
+        <item>Outros</item>
+    </string-array>
+    <string-array name="typesOfBudget">
+        <item>Salário</item>
+        <item>Presente</item>
+        <item>Bônus</item>
+        <item>Outros</item>
+    </string-array>
+
+    <string name="typeOfExpense">Tipo de gasto</string>
+    <string name="dayFinance">dd/mm/yyyy</string>
+    <string name="date">Data</string>
+    <string name="recurrentExpense">Pagamento recorrente</string>
+    <string name="amountField">Quantia</string>
+    <string name="addFinance">Adicionar</string>
+    <string name="addingFinance">Nova finança</string>
+    <string name="expenseFormText">Despesa</string>
+    <string name="budgetFormText">Receita</string>
+    <string name="goalFormText">Metas</string>
+    <string name="coupleExpenseCheck">Despesa do casal</string>
+    <string name="finance_title">Nome da despesa</string>
+    <string name="title_finance_form">Formulário de Finanças</string>
+</resources>

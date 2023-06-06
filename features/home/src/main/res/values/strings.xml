@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sort_user">Minhas finanças</string>
+    <string name="sort_group">Finanças do grupo</string>
+    <string name="fab_add_description">Botão de adicionar finanças</string>
+</resources>
