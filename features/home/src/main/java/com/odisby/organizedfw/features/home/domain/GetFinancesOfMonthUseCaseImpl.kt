@@ -28,8 +28,7 @@ class GetFinancesOfMonthUseCaseImpl @Inject constructor(
                 .map { finance ->
                     val user = usersRepository.getUserById(userId)!!
                     val zoneId = ZoneId.of("America/Sao_Paulo")
-                    val instant: Instant = Instant.ofEpochMilli(finance.date)
-                    val localDateTime: LocalDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+                    val localDateTime: LocalDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(finance.date), zoneId)
                     FinanceEntity(
                         id = finance.id,
                         userId = userId,

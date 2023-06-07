@@ -22,8 +22,10 @@ interface FinanceRepository {
     /**
      * Add a new finance
      */
-    suspend fun add(userId: String, name: String, date: Long,
-                    description: String, amount: Double,
+    suspend fun add(name: String,
+                    date: Long,
+                    description: String,
+                    amount: Double,
                     recurrent: Boolean)
 
 }

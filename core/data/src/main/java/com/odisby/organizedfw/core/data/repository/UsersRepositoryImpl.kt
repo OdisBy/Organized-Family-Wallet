@@ -51,6 +51,10 @@ internal class UsersRepositoryImpl @Inject constructor(
         return sessionManager.getUserId()
     }
 
+    override suspend fun getGroupId(): String {
+        return sessionManager.getGroupId() ?: "Unknown error"
+    }
+
     override suspend fun updateNameUser(name: String) {
         val userId = sessionManager.getUserId()
         val snapshot = firebaseFirestore.collection("users")

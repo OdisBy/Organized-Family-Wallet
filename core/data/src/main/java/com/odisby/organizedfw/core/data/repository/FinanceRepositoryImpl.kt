@@ -5,6 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.odisby.organizedfw.core.data.model.TransactionDomain
 import com.odisby.organizedfw.core.data.model.UserDomain
+import com.odisby.organizedfw.core.data.session.SessionManager
 import com.odisby.organizedfw.core.data.util.FinanceRepositoryException
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
@@ -15,6 +16,7 @@ import kotlin.collections.HashMap
 
 internal class FinanceRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
+    private val sessionManager: SessionManager
 ) :
     FinanceRepository {
 
@@ -69,14 +71,15 @@ internal class FinanceRepositoryImpl @Inject constructor(
 
 
     override suspend fun add(
-        userId: String,
         name: String,
         date: Long,
         description: String,
         amount: Double,
         recurrent: Boolean
     ) {
-//        val localDateToLong = date.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+        val userId = sessionManager.getUserId()
+        val groupId = sessionManager.getGroupId()!!
+
         val finance = TransactionDomain(
             id = UUID.randomUUID().toString(),
             userId = userId,
@@ -88,7 +91,11 @@ internal class FinanceRepositoryImpl @Inject constructor(
         )
 
 
-        val transactionRef = firestore.collection("transactions").document(finance.id)
+        val transactionRef = firestore
+            .collection("groups").document(groupId)
+            .collection("transactions").document(finance.id)
+
+
         val userRef = firestore.collection("users").document(userId)
 
         val userBalance = userRef.get()

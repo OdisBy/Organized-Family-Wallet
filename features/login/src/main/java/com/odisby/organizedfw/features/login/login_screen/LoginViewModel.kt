@@ -30,8 +30,8 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun createLoginSession(userId: String){
-        authRepository.createLoginSession(userId)
+    fun createLoginSession(userId: String, groupId: String){
+        authRepository.createLoginSession(userId, groupId)
     }
 
     fun isLogged() = viewModelScope.launch {

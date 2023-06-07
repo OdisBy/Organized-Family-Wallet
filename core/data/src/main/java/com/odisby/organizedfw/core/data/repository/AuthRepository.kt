@@ -15,5 +15,5 @@ interface AuthRepository {
         profileAvatar: Bitmap
     ): UserDomain
 
-    fun createLoginSession(userId: String)
+    fun createLoginSession(userId: String, groupId: String)
 }

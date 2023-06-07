@@ -87,7 +87,7 @@ internal class AuthRepositoryImpl @Inject constructor(
                 balance = 0.0,
                 email = null,
                 phoneNumber = null,
-                groupId = null,
+                groupId = "",
                 profileUri = avatarUri
             )
 
@@ -123,15 +123,15 @@ internal class AuthRepositoryImpl @Inject constructor(
                 userRef.set(userDomain)
             }
 
-            createLoginSession(userDomain.id)
+            createLoginSession(userDomain.id, groupRef.id)
             return userDomain
         } catch (e: Exception){
             throw e
         }
     }
 
-    override fun createLoginSession(userId: String) {
-        sessionManager.createLoginSession(userId)
+    override fun createLoginSession(userId: String, groupId: String) {
+        sessionManager.createLoginSession(userId, groupId)
     }
 
     private fun addUserToList(groupDomain: GroupDomain, groupUserDomain: GroupUsersDomain): List<GroupUsersDomain> {
@@ -161,26 +161,69 @@ internal class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+//    private fun handleUserExists(userId: String, continuation: CancellableContinuation<SignInResult>) {
+//
+//        firebaseFirestore.collection("users")
+//            .document(userId)
+//            .get()
+//            .addOnCompleteListener { task ->
+//                val exists = task.isSuccessful && document != null && document.exists()
+//                if(exists) {
+//                    val user = sessionManager.documentToUserDomain(task.result)
+//                    SignInResult.Success(user.id, user.groupId)
+//                } else {
+//                    SignInResult.AccountNotCompleted
+//                }
+//                continuation.resume(result)
+//            }
+
+
+
+//        userExists(userId) { exists ->
+//            val result = if (exists) {
+//                SignInResult.Success(userId)
+//            } else {
+//                SignInResult.AccountNotCompleted
+//            }
+//            continuation.resume(result)
+//        }
+//    }
+
     private fun handleUserExists(userId: String, continuation: CancellableContinuation<SignInResult>) {
-        userExists(userId) { exists ->
-            val result = if (exists) {
-                SignInResult.Success(userId)
-            } else {
-                SignInResult.AccountNotCompleted
-            }
-            continuation.resume(result)
-        }
-    }
-    private fun userExists(userId: String, callback: (Boolean) -> Unit) {
         firebaseFirestore.collection("users")
             .document(userId)
             .get()
-            .addOnCompleteListener { task ->
-                val document = task.result
-                val exists = task.isSuccessful && document != null && document.exists()
-                callback(exists)
+            .addOnSuccessListener { documentSnapshot ->
+                val exists = documentSnapshot.exists()
+                val result = if (exists) {
+                    val user = sessionManager.documentToUserDomain(documentSnapshot)
+                    SignInResult.Success(user.id, user.groupId)
+                } else {
+                    SignInResult.AccountNotCompleted
+                }
+                continuation.resume(result)
+            }
+            .addOnFailureListener { exception ->
+                val exceptionMessage = SignInResult.Error(exception.localizedMessage ?: "Unknown error")
+                continuation.resume(exceptionMessage)
             }
     }
+
+
+//    private fun userExists(userId: String, callback: (Boolean) -> Unit) {
+//        firebaseFirestore.collection("users")
+//            .document(userId)
+//            .get()
+//            .addOnCompleteListener { task ->
+//                val document = task.result
+//                val exists = task.isSuccessful && document != null && document.exists()
+//                if(exists) {
+//                    val user = sessionManager.documentToUserDomain(task.result)
+//                } else {
+//                    callback(false)
+//                }
+//            }
+//    }
 
     private fun handleLoginError(error: Exception?, continuation: CancellableContinuation<SignInResult>) {
         Log.w(TAG, error.toString())

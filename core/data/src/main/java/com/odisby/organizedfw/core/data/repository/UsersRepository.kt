@@ -18,6 +18,8 @@ interface UsersRepository {
 
     suspend fun getUserId(): String
 
+    suspend fun getGroupId(): String
+
     suspend fun updateNameUser(name: String)
 
     suspend fun updateBalance(userId: String, amount: Double)

@@ -1,7 +1,7 @@
 package com.odisby.organizedfw.core.data.util
 
 sealed class SignInResult {
-    data class Success(val userId: String): SignInResult()
+    data class Success(val userId: String, val groupId: String): SignInResult()
     object AccountNotCompleted : SignInResult() {
         val message: String = "A conta não está completa.\nPor favor, preencha todas as informações."
     }

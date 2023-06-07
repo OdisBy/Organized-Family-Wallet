@@ -79,7 +79,7 @@ class LoginFragment : Fragment() {
                         }
                         is SignInResult.Success -> {
                             binding.progressBar.visibility = View.INVISIBLE
-                            userLogged(signInState.userId)
+                            userLogged(signInState.userId, signInState.groupId)
                             navigateToHomeFragment()
                         }
                         is SignInResult.PasswordError -> {
@@ -108,8 +108,8 @@ class LoginFragment : Fragment() {
                 }
         }
     }
-    private fun userLogged(userId: String) {
-        viewModel.createLoginSession(userId)
+    private fun userLogged(userId: String, groupId: String) {
+        viewModel.createLoginSession(userId, groupId)
         navigateToHomeFragment()
     }
 

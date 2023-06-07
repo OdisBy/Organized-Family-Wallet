@@ -25,6 +25,8 @@ class ExpenseFormFragment : Fragment() {
 
     private var localDate = LocalDate.now()
 
+    private var selectedDate: Date? = null
+
     private lateinit var viewModel: FinancesFormViewModel
 
 
@@ -78,7 +80,7 @@ class ExpenseFormFragment : Fragment() {
         // Get values from input to save
         val expenseName = binding.nameOfExpenseField.editText?.text.toString()
         val typeOfExpense = binding.typeOfExpenseTextView.text.toString()
-        val dateOfExpense = Date().time
+        val dateOfExpense = selectedDate?.time ?: 0
         val amount = binding.amountSpentField.editText?.text.toString().toDouble()
         val isRecurrent = binding.recurrentCheck.isChecked
 //        val isCouple = binding.coupleFinanceCheck.isChecked
@@ -107,14 +109,16 @@ class ExpenseFormFragment : Fragment() {
     }
 
     private fun showDate(year: Int, month: Int, day: Int) {
-        localDate = LocalDate.of(year, month + 1, day)
+        val selectedLocalDate = LocalDate.of(year, month + 1, day)
         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale("pt", "BR"))
-        val currentDate = localDate.format(formatter)
-        binding.dateExpenseText.setText(currentDate)
+        val currentDate = selectedLocalDate.format(formatter)
 
-        Log.d("Type", "${binding.typeOfExpenseTextView.text}")
-        Log.d("Picked Date", "$year-$month-$day")
-        Log.d("Picked Date", "LocalDate = $currentDate")
+        val selectedCalendar = Calendar.getInstance().apply {
+            set(year, month, day)
+        }
+        selectedDate = selectedCalendar.time
+
+        binding.dateExpenseText.setText(currentDate)
     }
 
     override fun onDestroy() {

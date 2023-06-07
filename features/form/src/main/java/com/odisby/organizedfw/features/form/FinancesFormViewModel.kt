@@ -27,11 +27,17 @@ class FinancesFormViewModel @Inject constructor(
      * @param amount: How much spent or earned
      * @param financeType: Expense or Budget
      */
-    fun addFinance(name: String, date: Long, description: String, amount: Double, recurrent: Boolean, onResult: (Boolean) -> Unit) = viewModelScope.launch{
-        Log.d(TAG, "Enter launch method, amount = $amount.")
+    fun addFinance(
+        name: String,
+        date: Long,
+        description: String,
+        amount: Double,
+        recurrent: Boolean,
+        onResult: (Boolean) -> Unit) = viewModelScope.launch{
         try {
-            val userId = usersRepository.getMainUser()!!.id
-            financeRepository.add(userId, name, date, description, amount, recurrent)
+//            val userId = usersRepository.getMainUser()!!.id
+//            val groupId = usersRepository.getGroupId()
+            financeRepository.add(name, date, description, amount, recurrent)
             onResult(true) // Indicate success
         }catch (e: Throwable){
             Log.d(TAG, "An error occurred in formViewModel. The error is: $e")
