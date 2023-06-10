@@ -19,18 +19,27 @@ internal class GroupRepositoryImpl @Inject constructor(
 ) : GroupRepository {
     override suspend fun getUsers(): List<GroupUsersDomain?> {
         val groupId = getUserGroupId()
+        val userId = sessionManager.getUserId()
 
         return try {
-            val group = firebaseFirestore.collection("groups")
+            val groupSnapshot = firebaseFirestore.collection("groups")
                 .document(groupId)
                 .get()
                 .await()
-                .toObject(GroupDomain::class.java)
 
-            group!!.users
-        } catch (e: Exception){
-            Log.w(TAG, "Error on try to get users from group $groupId, error: ${e.message}")
-            listOf()
+            val group = groupSnapshot.toObject(GroupDomain::class.java)
+            val mainUser = group?.users?.firstOrNull { it.id == userId }
+            val otherUsers = group?.users?.filterNot { it.id == userId }
+
+            mutableListOf<GroupUsersDomain?>().apply {
+                add(mainUser)
+                if (otherUsers != null) {
+                    addAll(otherUsers)
+                }
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Error retrieving users from group $groupId. Error: ${e.message}")
+            emptyList()
         }
     }
 
