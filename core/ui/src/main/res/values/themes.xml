@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.Organized" parent="Theme.Material3.DayNight">
-        <item name="colorAccent">@color/secondary_color</item>
+        <item name="colorAccent">@color/colorSecondary</item>
         <item name="bottomSheetDialogTheme">@style/Widget.Organized.BottomSheet</item>
         <!--Remove default actionbar-->
 
@@ -91,7 +91,8 @@
     </style>
 
     <style name="Theme.Organized.Button.Icon" parent="Widget.Material3.Button.Icon">
-        <item name="backgroundTint">@color/secondary_color</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="Theme.Organized.TextButton" parent="Widget.Material3.Button.TextButton">
@@ -101,8 +102,9 @@
 
 
     <style name="Theme.Organized.DialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/black</item>
-        <item name="colorAccent">@color/secondary_color</item>
+        <item name="colorAccent">@color/proton_light_gray</item>
     </style>
 
     <style name="Theme.Organized.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">

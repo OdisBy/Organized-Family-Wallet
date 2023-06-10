@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary_color">
+    android:background="@color/colorPrimary">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -208,7 +208,7 @@
             android:text="Ganho do casal"
             app:layout_constraintTop_toBottomOf="@id/recurrentCheck" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/addNewIncomeButton"
             style="@style/Theme.Organized.Button.Icon"
             android:layout_width="wrap_content"
@@ -221,6 +221,7 @@
             android:text="@string/addFinance"
             android:textSize="20sp"
             app:icon="@drawable/ic_add"
+            app:iconTint="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/coupleFinanceCheck" />
