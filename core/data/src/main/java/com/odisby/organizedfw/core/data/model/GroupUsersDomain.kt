@@ -6,7 +6,7 @@ import androidx.core.net.toUri
 data class GroupUsersDomain (
     val id: String,
     val username: String,
-    val balance: Double,
+    var balance: Double,
     val profilePhoto: String? = null,
     var lastTransaction: TransactionDomain?
 ) {

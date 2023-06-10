@@ -29,7 +29,7 @@ class FinancesFormViewModel @Inject constructor(
      */
     fun addFinance(
         name: String,
-        date: Long,
+        date: Date,
         description: String,
         amount: Double,
         recurrent: Boolean,

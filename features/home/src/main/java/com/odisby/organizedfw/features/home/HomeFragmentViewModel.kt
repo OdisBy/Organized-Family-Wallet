@@ -55,7 +55,7 @@ class HomeFragmentViewModel @Inject constructor(
         _uiState.value = UiStateFlow.Loading()
         val user = usersRepository.getMainUser()!!
         try{
-            val transactions = getFinancesOfMonthUseCase(user.id)
+            val transactions = getFinancesOfMonthUseCase()
             val getWelcomeName = getWelcomeName(user.username!!)
             val getWelcomeDay = getWelcomeDay()
             val getAvatar = getAvatar(user.id)!!

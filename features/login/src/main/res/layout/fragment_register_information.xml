@@ -92,7 +92,6 @@
         app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/username_input"
         app:layout_constraintBottom_toTopOf="@id/avatar"
         app:startIconDrawable="@drawable/ic_email"
         app:startIconTint="@color/white">
@@ -117,7 +116,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/group_input"
-        app:layout_constraintBottom_toTopOf="@id/button"
         android:background="@color/black"
         app:roundPercent="1" />
 
@@ -158,7 +156,7 @@
         app:iconGravity="textEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/bottom_guideline" />
+        app:layout_constraintTop_toBottomOf="@id/avatar" />
 
     <include
         android:id="@+id/progress_bar"

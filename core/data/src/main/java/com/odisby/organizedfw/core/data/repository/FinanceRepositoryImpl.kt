@@ -3,13 +3,17 @@ package com.odisby.organizedfw.core.data.repository
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.odisby.organizedfw.core.data.model.GroupDomain
+import com.odisby.organizedfw.core.data.model.GroupUsersDomain
 import com.odisby.organizedfw.core.data.model.TransactionDomain
 import com.odisby.organizedfw.core.data.model.UserDomain
 import com.odisby.organizedfw.core.data.session.SessionManager
 import com.odisby.organizedfw.core.data.util.FinanceRepositoryException
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.HashMap
@@ -41,13 +45,30 @@ internal class FinanceRepositoryImpl @Inject constructor(
 
 
     override suspend fun fetchMonthByUser(month: Long, userId: String): List<TransactionDomain> {
-        val endOfMonth = month - 2592000000L // One month ago in Long
-        Log.w(TAG, "EndOfMonth = $endOfMonth, UserId = $userId")
-        val querySnapshot = firestore.collection("transactions")
-            .whereEqualTo("userId", userId)
-            .whereGreaterThan("date", endOfMonth)
-            .get()
-            .await()
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun fetchGroupFinancesByMonth(month: Int): List<TransactionDomain> {
+
+        val rangeCalendar = Calendar.getInstance()
+        rangeCalendar.add(Calendar.MONTH, -1)
+
+        val rangeDate = rangeCalendar.time
+
+        val groupId = sessionManager.getGroupId()!!
+        Log.w(TAG, "EndOfMonth = $rangeDate, groupId = $groupId")
+        val transactionsRef =
+            firestore
+                .collection("groups")
+                .document(groupId)
+                .collection("transactions")
+
+        val querySnapshot =
+            transactionsRef
+            .whereGreaterThan("date", rangeDate)
+                .get()
+                .await()
+
         return try{
             querySnapshot.documents.mapNotNull { doc ->
                 doc.toObject(TransactionDomain::class.java)
@@ -59,20 +80,27 @@ internal class FinanceRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getLastByUser(userId: String): TransactionDomain? {
-        val querySnapshot = firestore.collection("transactions")
-            .whereEqualTo("userId", userId)
-            .orderBy("date", Query.Direction.ASCENDING)
-            .limitToLast(1)
-            .get()
-            .await()
 
-        return querySnapshot.documents.firstOrNull()?.toObject(TransactionDomain::class.java)
+        val groupId = sessionManager.getGroupId()!!
+
+        val transaction =
+            firestore
+                .collection("groups")
+                .document(groupId)
+                .collection("transactions")
+                .whereEqualTo("userId", userId)
+                .orderBy("date", Query.Direction.ASCENDING)
+                .limitToLast(1)
+                .get()
+                .await()
+
+        return transaction.documents.firstOrNull()?.toObject(TransactionDomain::class.java)
     }
 
 
     override suspend fun add(
         name: String,
-        date: Long,
+        date: Date,
         description: String,
         amount: Double,
         recurrent: Boolean
@@ -95,20 +123,33 @@ internal class FinanceRepositoryImpl @Inject constructor(
             .collection("groups").document(groupId)
             .collection("transactions").document(finance.id)
 
+        val groupRef = firestore
+            .collection("groups")
+            .document(groupId)
+
+
+        val groupObject = groupRef.get()
+            .await()
+            .toObject(GroupDomain::class.java)
+
 
         val userRef = firestore.collection("users").document(userId)
 
-        val userBalance = userRef.get()
+        val user = userRef.get()
             .await()
             .toObject(UserDomain::class.java)!!
-            .balance
 
-        val newBalance = userBalance.plus(amount)
+        val newBalance = user.balance.plus(amount)
+
+        groupObject!!.users.firstOrNull() { it.id == userId }?.balance = newBalance
         val newBalanceHashMap: HashMap<String, Any> = hashMapOf ("balance" to newBalance)
+
+        finance.userName = user.username!!
         try {
             firestore.runBatch { batch ->
                 batch.set(transactionRef, finance)
                 batch.update(userRef, newBalanceHashMap)
+                batch.set(groupRef, groupObject)
             }.await()
         } catch (e: Exception) {
             throw FinanceRepositoryException("Failed to add finance or update balance, error ${e.message.toString()}", e)

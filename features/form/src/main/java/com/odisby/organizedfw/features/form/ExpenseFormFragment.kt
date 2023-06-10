@@ -13,6 +13,11 @@ import com.odisby.organizedfw.features.form.databinding.FragmentExpenseFormBindi
 import com.odisby.organizedfw.features.form.util.MyDatePickerDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -23,11 +28,11 @@ class ExpenseFormFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private var localDate = LocalDate.now()
-
     private var selectedDate: Date? = null
 
     private lateinit var viewModel: FinancesFormViewModel
+
+    private var zoneId = ZoneId.of("America/Sao_Paulo")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,25 +77,17 @@ class ExpenseFormFragment : Fragment() {
         binding.addNewExpenseButton.setOnClickListener { onSave() }
     }
 
-    /**
-     * Take the values of inputs
-     * Call addFinance from viewModel. It'll add to room database
-     */
     private fun onSave(){
         // Get values from input to save
         val expenseName = binding.nameOfExpenseField.editText?.text.toString()
         val typeOfExpense = binding.typeOfExpenseTextView.text.toString()
-        val dateOfExpense = selectedDate?.time ?: 0
+        val dateOfExpense = selectedDate!!
         val amount = binding.amountSpentField.editText?.text.toString().toDouble()
         val isRecurrent = binding.recurrentCheck.isChecked
 //        val isCouple = binding.coupleFinanceCheck.isChecked
 
         val expenseAmount = amount * -1
 
-        /**
-         * call addFinance from viewModel
-         * coroutine will try, if it run isSuccess will return true
-         */
         viewModel.addFinance(
             expenseName,
             dateOfExpense,
@@ -111,15 +108,24 @@ class ExpenseFormFragment : Fragment() {
     private fun showDate(year: Int, month: Int, day: Int) {
         val selectedLocalDate = LocalDate.of(year, month + 1, day)
         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale("pt", "BR"))
-        val currentDate = selectedLocalDate.format(formatter)
+        val currentDateString = selectedLocalDate.format(formatter)
 
-        val selectedCalendar = Calendar.getInstance().apply {
-            set(year, month, day)
+        val currentDate = LocalDate.now()
+        val selectedDateTime = if (selectedLocalDate == currentDate) {
+            val currentDateTime = LocalDateTime.now(zoneId)
+            currentDateTime
+        } else {
+            val endOfDay = LocalTime.MAX
+            val zonedDateTime = ZonedDateTime.of(selectedLocalDate, endOfDay, zoneId)
+            val selectedDateTime = zonedDateTime.toLocalDateTime()
+            selectedDateTime
         }
-        selectedDate = selectedCalendar.time
 
-        binding.dateExpenseText.setText(currentDate)
+        selectedDate = Date.from(selectedDateTime.atZone(zoneId).toInstant())
+
+        binding.dateExpenseText.setText(currentDateString)
     }
+
 
     override fun onDestroy() {
         super.onDestroy()

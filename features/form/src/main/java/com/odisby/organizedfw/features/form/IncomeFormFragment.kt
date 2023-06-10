@@ -14,6 +14,7 @@ import com.odisby.organizedfw.features.form.databinding.FragmentIncomeFormBindin
 import com.odisby.organizedfw.features.form.util.MyDatePickerDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -24,7 +25,7 @@ class IncomeFormFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private var localDate = LocalDate.now()
+    private var selectedDate: Date? = null
 
     private lateinit var viewModel: FinancesFormViewModel
 
@@ -73,7 +74,7 @@ class IncomeFormFragment : Fragment() {
         // Get values from input to save
         val expenseName = binding.nameOfBudgetField.editText?.text.toString()
         val typeOfExpense = binding.typeOfIncomeTextView.text.toString()
-        val dateOfExpense = Date().time
+        val dateOfExpense = selectedDate!!
         val amount = binding.amountReceivedField.editText?.text.toString().toDouble()
         val isRecurrent = binding.recurrentCheck.isChecked
 //        val isCouple = binding.coupleFinanceCheck.isChecked
@@ -102,14 +103,13 @@ class IncomeFormFragment : Fragment() {
 
 
     private fun showDate(year: Int, month: Int, day: Int) {
-        localDate = LocalDate.of(year, month + 1, day)
+        val selectedLocalDate = LocalDate.of(year, month + 1, day)
         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale("pt", "BR"))
-        val currentDate = localDate.format(formatter)
-        binding.dateIncomeText.setText(currentDate)
+        val currentDateString = selectedLocalDate.format(formatter)
 
-        Log.d("Type", "${binding.typeOfIncomeTextView.text}")
-        Log.d("Picked Date", "$year-$month-$day")
-        Log.d("Picked Date", "LocalDate = $currentDate")
+        // Select date to Date of java util
+        selectedDate = Date.from(selectedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+        binding.dateIncomeText.setText(currentDateString)
     }
 
     override fun onDestroy() {
