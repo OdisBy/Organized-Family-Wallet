@@ -80,6 +80,10 @@ class HomeFragment : Fragment() {
             navController.navigate(com.odisby.organizedfw.core.ui.R.id.action_homeFragment_to_incomeForm)
         }
 
+        binding.groupButton.setOnClickListener {
+            navController.navigate(com.odisby.organizedfw.core.ui.R.id.action_homeFragment_to_groupPage)
+        }
+
         binding.topPanel.menuButton.setOnClickListener {
             showTopPopup()
         }

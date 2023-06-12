@@ -1,0 +1,33 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    id 'com.google.dagger.hilt.android'
+}
+
+android {
+    namespace 'com.odisby.organizedfw.features.group'
+    compileSdk rootProject.ext.sdkVersion
+
+    defaultConfig {
+        minSdk rootProject.ext.minVersion
+        targetSdk rootProject.ext.targetVersion
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation project(":core:ui")
+    implementation project(":core:data")
+
+    implementation libs.hilt.android
+    implementation libs.androidx.legacy.support.v4
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    kapt libs.hilt.compiler
+
+    implementation libs.bundles.navigation
+}

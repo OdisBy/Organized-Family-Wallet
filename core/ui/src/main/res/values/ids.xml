@@ -8,9 +8,13 @@
 
     // Home
     <item name="action_homeFragment_to_settingsFragment" type="id" />
+
     // Forms
     <item name="action_homeFragment_to_expenseForm" type="id" />
     <item name="action_homeFragment_to_incomeForm" type="id" />
     <item name="action_expenseFormFragment_to_incomeFormFragment" type="id" />
     <item name="action_incomeFormFragment_to_expenseFormFragment" type="id" />
+
+    // Group page
+    <item name="action_homeFragment_to_groupPage" type="id" />
 </resources>

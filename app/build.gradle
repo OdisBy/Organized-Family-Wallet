@@ -45,6 +45,7 @@ dependencies {
     implementation project(":features:settings")
     implementation project(":features:login")
     implementation project(":features:home")
+    implementation project(":features:group")
 
     implementation libs.androidx.splash.screen
 

@@ -57,6 +57,12 @@
             <action
                 android:id="@id/action_homeFragment_to_settingsFragment"
                 app:destination="@id/settingsFragment" />
+
+            <action
+                android:id="@id/action_homeFragment_to_groupPage"
+                app:destination="@id/groupPageFragment"
+                app:popUpToInclusive="true" />
+
             <deepLink
                 android:id="@+id/deepLink"
                 app:uri="organized-app://com.odisby.organizedfw/home" />
@@ -82,6 +88,14 @@
                 android:id="@id/action_incomeFormFragment_to_expenseFormFragment"
                 app:destination="@id/expenseFormFragment"
                 app:popUpTo="@id/homeFragment"/>
+        </fragment>
+
+        <fragment
+            android:id="@+id/groupPageFragment"
+            android:name="com.odisby.organizedfw.features.group.GroupPageFragment"
+            android:label="Página do grupo"
+            tools:layout="@layout/fragment_group_page">
+
         </fragment>
 
         <fragment
