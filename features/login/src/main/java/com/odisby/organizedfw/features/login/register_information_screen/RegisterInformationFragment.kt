@@ -196,7 +196,7 @@ class RegisterInformationFragment : Fragment() {
         binding.cameraButton.visibility = View.VISIBLE
 
         binding.button.text = "Concluir"
-        binding.button.setIconResource(R.drawable.ic_check)
+        binding.button.setIconResource(com.odisby.organizedfw.core.ui.R.drawable.ic_check)
 
         buttonStep++
         return true

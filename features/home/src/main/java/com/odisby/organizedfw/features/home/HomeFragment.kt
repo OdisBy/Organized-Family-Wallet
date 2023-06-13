@@ -55,7 +55,6 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomInclude.bottomSheet)
-
         return binding.root
     }
 

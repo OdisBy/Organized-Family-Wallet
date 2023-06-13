@@ -12,9 +12,7 @@
         android:id="@+id/topPanel"
         layout="@layout/top_model_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/start_guideline"
-        app:layout_constraintEnd_toEndOf="@id/end_guideline"/>
+        android:layout_height="wrap_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/balance_recycler_view"
