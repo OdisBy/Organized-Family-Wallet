@@ -1,4 +1,4 @@
-package com.odisby.organizedfw.features.group
+package com.odisby.organizedfw.features.group.withGroup
 
 import androidx.lifecycle.ViewModel
 

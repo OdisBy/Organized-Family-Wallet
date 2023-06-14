@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -80,7 +81,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.groupButton.setOnClickListener {
-            navController.navigate(com.odisby.organizedfw.core.ui.R.id.action_homeFragment_to_groupPage)
+            // TODO
         }
 
         binding.topPanel.menuButton.setOnClickListener {
