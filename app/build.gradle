@@ -7,12 +7,12 @@ plugins {
 }
 
 android {
-    namespace 'com.odisby.organizedfw'
+    namespace 'com.ruliam.organizedfw'
     compileSdk rootProject.ext.sdkVersion
 
 
     defaultConfig {
-        applicationId "com.odisby.organizedfw"
+        applicationId "com.ruliam.organizedfw"
         minSdk rootProject.ext.minVersion
         targetSdk rootProject.ext.targetVersion
         versionCode 1

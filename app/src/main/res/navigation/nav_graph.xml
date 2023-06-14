@@ -6,7 +6,7 @@
     app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.odisby.organizedfw.features.login.login_screen.LoginFragment"
+        android:name="com.ruliam.organizedfw.features.login.login_screen.LoginFragment"
         android:label="Login Fragment"
         tools:layout="@layout/fragment_login">
 
@@ -17,13 +17,13 @@
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.odisby.organizedfw.features.login.signup_screen.SignUpFragment"
+        android:name="com.ruliam.organizedfw.features.login.signup_screen.SignUpFragment"
         android:label="SignUpFragment">
     </fragment>
 
     <fragment
         android:id="@+id/registerInformationFragment"
-        android:name="com.odisby.organizedfw.features.login.register_information_screen.RegisterInformationFragment"
+        android:name="com.ruliam.organizedfw.features.login.register_information_screen.RegisterInformationFragment"
         android:label="RegisterInformationFragment">
         <deepLink
             android:id="@+id/deepLink"
@@ -44,7 +44,7 @@
             app:uri="organized-app://com.odisby.organizedfw/app_graph" />
         <fragment
             android:id="@+id/homeFragment"
-            android:name="com.odisby.organizedfw.features.home.HomeFragment"
+            android:name="com.ruliam.organizedfw.features.home.HomeFragment"
             android:label="Home Fragment"
             tools:layout="@layout/fragment_home">
             <action
@@ -65,7 +65,7 @@
 
         <fragment
             android:id="@+id/expenseFormFragment"
-            android:name="com.odisby.organizedfw.features.form.ExpenseFormFragment"
+            android:name="com.ruliam.organizedfw.features.form.ExpenseFormFragment"
             android:label="@string/title_finance_form"
             tools:layout="@layout/fragment_expense_form" >
             <action
@@ -76,7 +76,7 @@
 
         <fragment
             android:id="@+id/incomeFormFragment"
-            android:name="com.odisby.organizedfw.features.form.IncomeFormFragment"
+            android:name="com.ruliam.organizedfw.features.form.IncomeFormFragment"
             android:label="Formulário de receita"
             tools:layout="@layout/fragment_income_form" >
             <action
@@ -87,7 +87,7 @@
 
         <fragment
             android:id="@+id/groupPageFragment"
-            android:name="com.odisby.organizedfw.features.group.withGroup.GroupPageFragment"
+            android:name="com.ruliam.organizedfw.features.group.withGroup.GroupPageFragment"
             android:label="Página do grupo"
             tools:layout="@layout/fragment_group_page">
 
@@ -99,7 +99,7 @@
 
         <fragment
             android:id="@+id/enterGroupPageFragment"
-            android:name="com.odisby.organizedfw.features.group.noGroup.EnterGroupPageFragment"
+            android:name="com.ruliam.organizedfw.features.group.noGroup.EnterGroupPageFragment"
             android:label="Entrar em grupo"
             tools:layout="@layout/fragment_enter_group_page">
 
@@ -111,7 +111,7 @@
 
         <fragment
             android:id="@+id/settingsFragment"
-            android:name="com.odisby.organizedfw.features.settings.SettingsFragment"
+            android:name="com.ruliam.organizedfw.features.settings.SettingsFragment"
             android:label="SettingsFragment"
             tools:layout="@layout/custom_pref"/>
 

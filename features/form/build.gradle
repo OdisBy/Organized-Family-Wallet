@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'com.odisby.organizedfw.features.form'
+    namespace 'com.ruliam.organizedfw.features.form'
     compileSdk rootProject.ext.sdkVersion
 
     defaultConfig {

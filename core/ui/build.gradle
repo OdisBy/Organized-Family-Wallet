@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.odisby.organizedfw.core.ui'
+    namespace 'com.ruliam.organizedfw.core.ui'
     compileSdk rootProject.ext.sdkVersion
     defaultConfig {
         minSdk rootProject.ext.minVersion
