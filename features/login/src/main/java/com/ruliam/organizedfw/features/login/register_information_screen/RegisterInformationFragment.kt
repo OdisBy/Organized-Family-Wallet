@@ -15,11 +15,13 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.core.view.drawToBitmap
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.ruliam.organizedfw.core.data.util.AuthResult
@@ -234,7 +236,11 @@ class RegisterInformationFragment : Fragment() {
     }
 
     private fun navigateToHomeFragment() {
-        findNavController().navigate(com.ruliam.organizedfw.core.ui.R.id.action_registerInformationFragment_to_app_graph)
+        val request = NavDeepLinkRequest.Builder
+            .fromUri("organized-app://com.ruliam.organizedfw/home".toUri())
+            .build()
+        navController.navigate(request)
+//        findNavController().navigate(com.ruliam.organizedfw.core.ui.R.id.action_registerInformationFragment_to_app_graph)
     }
 
     companion object {

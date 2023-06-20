@@ -4,21 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/loginFragment">
+
+    <include app:graph="@navigation/form_nav" />
+    <include app:graph="@navigation/group_nav" />
+    <include app:graph="@navigation/settings_graph" />
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.ruliam.organizedfw.features.login.login_screen.LoginFragment"
         android:label="Login Fragment"
         tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_sign_up"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_registerInformationFragment"
+            app:destination="@id/registerInformationFragment" />
 
         <action
-            android:id="@id/action_login_to_sign_up"
-            app:destination="@id/signUpFragment" />
+            android:id="@+id/action_login_to_home"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"
+            app:destination="@id/homeFragment" />
+
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="organized-app://com.ruliam.organizedfw/signin" />
     </fragment>
 
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.ruliam.organizedfw.features.login.signup_screen.SignUpFragment"
         android:label="SignUpFragment">
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="organized-app://com.ruliam.organizedfw/signup" />
     </fragment>
 
     <fragment
@@ -27,94 +47,28 @@
         android:label="RegisterInformationFragment">
         <deepLink
             android:id="@+id/deepLink"
-            app:uri="organized-app://com.odisby.organizedfw/register_information" />
-        <action
-            android:id="@id/action_registerInformationFragment_to_app_graph"
-            app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true"
-            app:destination="@id/app_graph" />
+            app:uri="organized-app://com.ruliam.organizedfw/register_information" />
     </fragment>
 
-    <navigation
-        android:id="@+id/app_graph"
-        app:startDestination="@id/homeFragment"
-        >
-        <deepLink
-            android:id="@+id/deepLink"
-            app:uri="organized-app://com.odisby.organizedfw/app_graph" />
-        <fragment
+    <fragment
             android:id="@+id/homeFragment"
             android:name="com.ruliam.organizedfw.features.home.HomeFragment"
             android:label="Home Fragment"
             tools:layout="@layout/fragment_home">
-            <action
-                android:id="@id/action_homeFragment_to_expenseForm"
-                app:destination="@id/expenseFormFragment" />
-
-            <action
-                android:id="@id/action_homeFragment_to_incomeForm"
-                app:destination="@id/incomeFormFragment" />
-            <action
-                android:id="@id/action_homeFragment_to_settingsFragment"
-                app:destination="@id/settingsFragment" />
 
             <deepLink
                 android:id="@+id/deepLink"
-                app:uri="organized-app://com.odisby.organizedfw/home" />
-        </fragment>
+                app:uri="organized-app://com.ruliam.organizedfw/home" />
+    </fragment>
 
-        <fragment
-            android:id="@+id/expenseFormFragment"
-            android:name="com.ruliam.organizedfw.features.form.ExpenseFormFragment"
-            android:label="@string/title_finance_form"
-            tools:layout="@layout/fragment_expense_form" >
-            <action
-                android:id="@id/action_expenseFormFragment_to_incomeFormFragment"
-                app:destination="@id/incomeFormFragment"
-                app:popUpTo="@id/homeFragment" />
-        </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.ruliam.organizedfw.features.settings.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/custom_pref">
 
-        <fragment
-            android:id="@+id/incomeFormFragment"
-            android:name="com.ruliam.organizedfw.features.form.IncomeFormFragment"
-            android:label="Formulário de receita"
-            tools:layout="@layout/fragment_income_form" >
-            <action
-                android:id="@id/action_incomeFormFragment_to_expenseFormFragment"
-                app:destination="@id/expenseFormFragment"
-                app:popUpTo="@id/homeFragment"/>
-        </fragment>
-
-        <fragment
-            android:id="@+id/groupPageFragment"
-            android:name="com.ruliam.organizedfw.features.group.withGroup.GroupPageFragment"
-            android:label="Página do grupo"
-            tools:layout="@layout/fragment_group_page">
-
-            <deepLink
-                android:id="@+id/deepLink"
-                app:uri="organized-app://com.odisby.organizedfw/group_page" />
-
-        </fragment>
-
-        <fragment
-            android:id="@+id/enterGroupPageFragment"
-            android:name="com.ruliam.organizedfw.features.group.noGroup.EnterGroupPageFragment"
-            android:label="Entrar em grupo"
-            tools:layout="@layout/fragment_enter_group_page">
-
-            <deepLink
-                android:id="@+id/deepLink"
-                app:uri="organized-app://com.odisby.organizedfw/enter_group" />
-
-        </fragment>
-
-        <fragment
-            android:id="@+id/settingsFragment"
-            android:name="com.ruliam.organizedfw.features.settings.SettingsFragment"
-            android:label="SettingsFragment"
-            tools:layout="@layout/custom_pref"/>
-
-    </navigation>
-
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="organized-app://com.ruliam.organizedfw/settings" />
+    </fragment>
 </navigation>

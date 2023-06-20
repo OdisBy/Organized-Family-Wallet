@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.PopupMenu
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.NavDeepLinkBuilder
+import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -69,16 +72,36 @@ class HomeFragment : Fragment() {
 
         // Open expense form
         binding.expenseButton.setOnClickListener {
-            navController.navigate(com.ruliam.organizedfw.core.ui.R.id.action_homeFragment_to_expenseForm)
+            val request = NavDeepLinkRequest.Builder
+                .fromUri("organized-app://com.ruliam.organizedfw.form/expense".toUri())
+                .build()
+            navController.navigate(request)
+//            navController.navigate(com.ruliam.organizedfw.core.ui.R.id.action_homeFragment_to_expenseForm)
         }
 
         // Open income form
         binding.incomeButton.setOnClickListener {
-            navController.navigate(com.ruliam.organizedfw.core.ui.R.id.action_homeFragment_to_incomeForm)
+            val request = NavDeepLinkRequest.Builder
+                .fromUri("organized-app://com.ruliam.organizedfw.form/income".toUri())
+                .build()
+            navController.navigate(request)
+//            navController.navigate(com.ruliam.organizedfw.core.ui.R.id.action_homeFragment_to_incomeForm)
         }
 
         binding.groupButton.setOnClickListener {
-            // TODO
+            val request = NavDeepLinkRequest.Builder
+                .fromUri("organized-app://com.ruliam.organizedfw.group/page".toUri())
+                .build()
+            navController.navigate(request)
+//            navController.navigate(com.ruliam.organizedfw.core.ui.R.id.action_homeFragment_to_groupPageFragment)
+        }
+
+        binding.buttonCardview6.setOnClickListener {
+            val uuid = "123456"
+            val request = NavDeepLinkRequest.Builder
+                .fromUri("organized-app://com.ruliam.organizedfw.group/enter/$uuid".toUri())
+                .build()
+            navController.navigate(request)
         }
 
         binding.topPanel.menuButton.setOnClickListener {
@@ -144,7 +167,11 @@ class HomeFragment : Fragment() {
         popup.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.menu_settings_option-> {
-                    navController.navigate(com.ruliam.organizedfw.core.ui.R.id.action_homeFragment_to_settingsFragment)
+//                    navController.navigate(com.ruliam.organizedfw.core.ui.R.id.action_homeFragment_to_settingsFragment)
+                    val request = NavDeepLinkRequest.Builder
+                        .fromUri("organized-app://com.ruliam.organizedfw/settings".toUri())
+                        .build()
+                    navController.navigate(request)
                 }
             }
             true

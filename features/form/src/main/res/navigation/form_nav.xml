@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/expenseFormFragment"
+    android:id="@+id/form_nav">
+
+    <fragment
+        android:id="@+id/expenseFormFragment"
+        android:name="com.ruliam.organizedfw.features.form.ExpenseFormFragment"
+        android:label="@string/title_finance_form"
+        tools:layout="@layout/fragment_expense_form" >
+
+
+        <deepLink
+            app:uri="organized-app://com.ruliam.organizedfw.form/expense" />
+        <action
+            android:id="@+id/action_expenseFormFragment_to_incomeFormFragment"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/form_nav"
+            app:destination="@id/incomeFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/incomeFormFragment"
+        android:name="com.ruliam.organizedfw.features.form.IncomeFormFragment"
+        android:label="Formulário de receita"
+        tools:layout="@layout/fragment_income_form" >
+
+
+        <deepLink
+            app:uri="organized-app://com.ruliam.organizedfw.form/income" />
+        <action
+            android:id="@+id/action_incomeFormFragment_to_expenseFormFragment"
+            app:popUpTo="@id/form_nav"
+            app:popUpToInclusive="true"
+            app:destination="@id/expenseFormFragment" />
+    </fragment>
+
+</navigation>

@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
 import com.ruliam.organizedfw.features.form.databinding.FragmentExpenseFormBinding
 import com.ruliam.organizedfw.features.form.util.MyDatePickerDialog
@@ -64,8 +66,9 @@ class ExpenseFormFragment : Fragment() {
         }
 
         // Go to incomeFragment
-        binding.incomeFormButton.setOnClickListener { findNavController().navigate(
-            com.ruliam.organizedfw.core.ui.R.id.action_expenseFormFragment_to_incomeFormFragment) }
+        binding.incomeFormButton.setOnClickListener {
+            findNavController().navigate(R.id.action_expenseFormFragment_to_incomeFormFragment)
+        }
 
         // Back to homeFragment
         binding.backButton.setOnClickListener { findNavController().navigateUp() }

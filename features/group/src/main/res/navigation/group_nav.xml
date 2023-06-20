@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/groupPageFragment"
+    android:id="@+id/group_nav">
+
+    <fragment
+        android:id="@+id/groupPageFragment"
+        android:name="com.ruliam.organizedfw.features.group.withGroup.GroupPageFragment"
+        android:label="Página do grupo"
+        tools:layout="@layout/fragment_group_page">
+
+
+        <deepLink
+            android:id="@+id/deepLinkPage"
+            app:uri="organized-app://com.ruliam.organizedfw.group/page" />
+
+        <deepLink
+            android:id="@+id/deepLinkEnter"
+            app:uri="organized-app://com.ruliam.organizedfw.group/enter/{groupID}" />
+        <argument
+            android:name="groupID"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+</navigation>

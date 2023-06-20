@@ -10,10 +10,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.ruliam.organizedfw.core.data.util.SignInResult
+import com.ruliam.organizedfw.core.ui.R
 import com.ruliam.organizedfw.features.login.databinding.FragmentLoginBinding
 import com.ruliam.organizedfw.features.login.utils.InputResource
 import com.ruliam.organizedfw.features.login.utils.LoginUtil
@@ -56,7 +58,13 @@ class LoginFragment : Fragment() {
         }
 
         binding.signUpButton.setOnClickListener {
-            findNavController().navigate(com.ruliam.organizedfw.core.ui.R.id.action_login_to_sign_up)
+//            val request = NavDeepLinkRequest.Builder
+//                .fromUri("organized-app://com.ruliam.organizedfw/signup".toUri())
+//                .build()
+//            val request = NavDeepLinkBuilder(requireContext())
+//                .setDestination()
+            findNavController().navigate(R.id.action_login_to_sign_up)
+//            findNavController().navigate(com.ruliam.organizedfw.core.ui.R.id.action_login_to_sign_up)
         }
 
         binding.emailSignIn.setOnClickListener {
@@ -118,15 +126,12 @@ class LoginFragment : Fragment() {
     }
 
     private fun navigateToHomeFragment() {
-        val request = NavDeepLinkRequest.Builder
-            .fromUri("organized-app://com.odisby.organizedfw/home".toUri())
-            .build()
-        findNavController().navigate(request)
+        findNavController().navigate(R.id.action_login_to_home)
     }
 
     private fun navigateCompleteAccount() {
         val request = NavDeepLinkRequest.Builder
-            .fromUri("organized-app://com.odisby.organizedfw/register_information".toUri())
+            .fromUri("organized-app://com.ruliam.organizedfw/register_information".toUri())
             .build()
         findNavController().navigate(request)
     }

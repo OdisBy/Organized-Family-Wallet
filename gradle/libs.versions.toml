@@ -83,6 +83,7 @@ firebase-storage = { module = "com.google.firebase:firebase-storage-ktx", versio
 # AndroidX
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastoreVersion"}
 androidx-navigation-fragment-ktx = { module = 'androidx.navigation:navigation-fragment-ktx', version.ref = "androidXNavigationVersion" }
+androidx-lifecycle-navigation-navigationSafeArgs = {module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "androidXNavigationVersion"}
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidXNavigationVersion" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidXAppcompatVersion" }
 androidx-constraintlayout = { module = 'androidx.constraintlayout:constraintlayout', version.ref = "androidXConstraintlayoutVersion" }

@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    // Start Login
+<!--    // Start Login-->
     <item name="action_login_to_sign_up" type="id" />
+    <item name="action_login_to_home" type="id" />
 
-    // Complete informartion
-    <item name="action_registerInformationFragment_to_app_graph" type="id" />
+<!--    // Complete informartion-->
+<!--    <item name="action_registerInformationFragment_to_app_graph" type="id" />-->
 
-    // Home
-    <item name="action_homeFragment_to_settingsFragment" type="id" />
+<!--    // Home-->
+<!--    <item name="action_homeFragment_to_settingsFragment" type="id" />-->
+<!--    <item name="action_homeFragment_to_groupPageFragment" type="id" />-->
 
-    // Forms
-    <item name="action_homeFragment_to_expenseForm" type="id" />
-    <item name="action_homeFragment_to_incomeForm" type="id" />
-    <item name="action_expenseFormFragment_to_incomeFormFragment" type="id" />
-    <item name="action_incomeFormFragment_to_expenseFormFragment" type="id" />
+<!--    // Forms-->
+<!--    <item name="action_homeFragment_to_expenseForm" type="id" />-->
+<!--    <item name="action_homeFragment_to_incomeForm" type="id" />-->
+<!--    <item name="action_expenseFormFragment_to_incomeFormFragment" type="id" />-->
+<!--    <item name="action_incomeFormFragment_to_expenseFormFragment" type="id" />-->
 
 </resources>

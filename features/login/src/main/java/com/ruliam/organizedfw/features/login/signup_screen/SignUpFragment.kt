@@ -92,7 +92,7 @@ class SignUpFragment : Fragment() {
 
     private fun navigateToInformation() {
         val request = NavDeepLinkRequest.Builder
-            .fromUri("organized-app://com.odisby.organizedfw/register_information".toUri())
+            .fromUri("organized-app://com.ruliam.organizedfw/register_information".toUri())
             .build()
         findNavController().navigate(request)
     }

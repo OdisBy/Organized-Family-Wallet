@@ -14,8 +14,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.ruliam.organizedfw.core.ui.R
 import com.ruliam.organizedfw.features.group.databinding.FragmentGroupPageBinding
+import kotlinx.coroutines.runBlocking
 
 class GroupPageFragment : Fragment() {
 
@@ -23,6 +25,9 @@ class GroupPageFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: GroupPageViewModel
+
+//    private val args: GroupPageFragmentArgs by navArgs()
+//    private val args: GroupPageFragmentArgs
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +46,13 @@ class GroupPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        lateinit var groupID: String
+        runBlocking {
+            groupID = viewModel.getGroupId()
+        }
+
+        binding.groupInviteCode.text = groupID
 
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
