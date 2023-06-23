@@ -1,4 +1,4 @@
-package com.ruliam.organizedfw.features.group.withGroup
+package com.ruliam.organizedfw.features.group
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -13,27 +13,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.ruliam.organizedfw.core.ui.R
 import com.ruliam.organizedfw.features.group.databinding.FragmentGroupPageBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+@AndroidEntryPoint
 class GroupPageFragment : Fragment() {
 
     private var _binding: FragmentGroupPageBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: GroupPageViewModel
-
-//    private val args: GroupPageFragmentArgs by navArgs()
-//    private val args: GroupPageFragmentArgs
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[GroupPageViewModel::class.java]
-    }
+    private val viewModel: GroupPageViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,13 +45,32 @@ class GroupPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.isLogged()
 
-        lateinit var groupID: String
-        runBlocking {
-            groupID = viewModel.getGroupId()
+        lifecycleScope.launch {
+            viewModel.signInState
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { isLogged ->
+                    Log.d(TAG, "isLogged $isLogged")
+                    if(isLogged){
+                        getGroupId()
+                    } else{
+                        val request = NavDeepLinkRequest.Builder
+                            .fromUri("organized-app://com.ruliam.organizedfw/signin".toUri())
+                            .build()
+                        findNavController().navigate(request)
+                    }
+                }
         }
 
-        binding.groupInviteCode.text = groupID
+
+
+//        lateinit var groupID: String
+//        runBlocking {
+//            groupID = viewModel.getGroupId()
+//        }
+
+        binding.groupInviteCode.text = "vazio"
 
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
@@ -63,6 +81,10 @@ class GroupPageFragment : Fragment() {
             shareInviteCode()
         }
 
+    }
+
+    private fun getGroupId() {
+        val a = 123
     }
 
     private fun shareInviteCode() {

@@ -43,6 +43,14 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(request)
 //            navController.navigate(com.ruliam.organizedfw.core.ui.R.id.action_homeFragment_to_groupPageFragment)
         }
+
+        if (appLinkData?.path.equals("/forms")) {
+            val request = NavDeepLinkRequest.Builder
+                .fromUri("organized-app://com.ruliam.organizedfw.form/expense".toUri())
+                .build()
+            navController.navigate(request)
+//            navController.navigate(com.ruliam.organizedfw.core.ui.R.id.action_homeFragment_to_groupPageFragment)
+        }
     }
 
     private fun setupNavigation() {

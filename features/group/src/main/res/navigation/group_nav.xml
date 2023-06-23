@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/groupPageFragment"
-        android:name="com.ruliam.organizedfw.features.group.withGroup.GroupPageFragment"
+        android:name="com.ruliam.organizedfw.features.group.GroupPageFragment"
         android:label="Página do grupo"
         tools:layout="@layout/fragment_group_page">
 
@@ -17,8 +17,10 @@
             app:uri="organized-app://com.ruliam.organizedfw.group/page" />
 
         <deepLink
+            android:autoVerify="true"
             android:id="@+id/deepLinkEnter"
-            app:uri="organized-app://com.ruliam.organizedfw.group/enter/{groupID}" />
+            app:action="ACTION_VIEW"
+            app:uri="https://www.ruliams.live/join?code={groupID}" />
         <argument
             android:name="groupID"
             app:argType="string"

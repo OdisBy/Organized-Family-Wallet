@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -29,6 +29,8 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: LoginViewModel
+
+    private lateinit var savedStateHandle: SavedStateHandle
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +52,9 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        savedStateHandle = findNavController().previousBackStackEntry!!.savedStateHandle
+        savedStateHandle.set(LOGIN_SUCCESSFUL, false)
 
         binding.progressBar.visibility = View.INVISIBLE
 
@@ -85,9 +90,7 @@ class LoginFragment : Fragment() {
                             binding.progressBar.visibility = View.VISIBLE
                         }
                         is SignInResult.Success -> {
-                            binding.progressBar.visibility = View.INVISIBLE
-                            userLogged(signInState.userId, signInState.groupId)
-                            navigateToHomeFragment()
+                            signSuccess(signInState)
                         }
                         is SignInResult.PasswordError -> {
                             binding.passwordInput.error = signInState.message
@@ -115,9 +118,17 @@ class LoginFragment : Fragment() {
                 }
         }
     }
+
+    private fun signSuccess(signInState: SignInResult.Success) {
+        binding.progressBar.visibility = View.INVISIBLE
+        userLogged(signInState.userId, signInState.groupId)
+        savedStateHandle.set(LOGIN_SUCCESSFUL, true)
+        findNavController().popBackStack()
+    }
+
     private fun userLogged(userId: String, groupId: String) {
         viewModel.createLoginSession(userId, groupId)
-        navigateToHomeFragment()
+//        navigateToHomeFragment()
     }
 
     private fun clearErrors(){
@@ -164,5 +175,6 @@ class LoginFragment : Fragment() {
 
     companion object {
         private const val TAG = "LoginFragment"
+        const val LOGIN_SUCCESSFUL: String = "LOGIN_SUCCESSFUL"
     }
 }

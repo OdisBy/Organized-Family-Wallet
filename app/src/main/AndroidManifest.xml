@@ -21,6 +21,8 @@
             android:screenOrientation="portrait"
             android:exported="true">
             <nav-graph android:value="@navigation/nav_graph" />
+            <nav-graph android:value="@navigation/group_nav" />
+            <nav-graph android:value="@navigation/form_nav" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,18 +33,46 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-            <intent-filter>
+
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
+                <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data android:host="ruliams.live" />
+                <data android:host="www.ruliams.live" />
                 <data android:pathPrefix="/group_page" />
             </intent-filter>
-        </activity>
 
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="www.ruliams.live" />
+                <data android:pathPrefix="/forms" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="www.ruliams.live" />
+                <data android:pathPrefix="/join" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
