@@ -57,7 +57,7 @@
                 android:id="@+id/group_invite_code"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="HZLN1T"
+                android:text=""
                 android:textSize="22sp"
                 android:gravity="center"
                 android:textColor="@color/white"

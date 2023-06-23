@@ -75,9 +75,9 @@ class GroupPageFragment : Fragment() {
             viewModel.signInState
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collect { isLogged ->
-                    Log.d(TAG, "isLogged $isLogged")
                     if(isLogged){
                         getGroupId()
+                        binding.groupInviteCode.text = viewModel.groupId
                     } else{
                         val request = NavDeepLinkRequest.Builder
                             .fromUri("organized-app://com.ruliam.organizedfw/signin".toUri())
@@ -86,15 +86,6 @@ class GroupPageFragment : Fragment() {
                     }
                 }
         }
-
-
-
-//        lateinit var groupID: String
-//        runBlocking {
-//            groupID = viewModel.getGroupId()
-//        }
-
-        binding.groupInviteCode.text = "vazio"
 
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
@@ -107,15 +98,14 @@ class GroupPageFragment : Fragment() {
 
     }
 
-    private fun getGroupId() {
-        val a = 123
+    private suspend fun getGroupId() {
+        viewModel.getGroupId()
     }
 
     private fun shareInviteCode() {
         try{
             val inviteCode = binding.groupInviteCode.text
-            // TODO add app link to open the app or play store
-            val inviteMessage = "Venha organizar suas finanças comigo no app Organized com o código de convite: $inviteCode"
+            val inviteMessage = "Venha organizar suas finanças comigo no app Organized com o link https://ruliams.live/join?code=$inviteCode. Ou entre com o código de convite: $inviteCode"
 
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND

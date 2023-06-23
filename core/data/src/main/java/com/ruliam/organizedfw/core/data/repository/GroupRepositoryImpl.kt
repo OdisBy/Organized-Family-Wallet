@@ -10,6 +10,7 @@ import com.ruliam.organizedfw.core.data.session.SessionManager
 import com.ruliam.organizedfw.core.data.util.CanNotAddFirebase
 import com.ruliam.organizedfw.core.data.util.DoesNotExist
 import kotlinx.coroutines.tasks.await
+import java.security.SecureRandom
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -48,10 +49,25 @@ internal class GroupRepositoryImpl @Inject constructor(
         return try {
             val userId = sessionManager.getUserId()
             val mainUser = firebaseToUserDomain(userId)
-            mainUser!!.groupId!!
+            mainUser!!.groupId
         } catch (e: Exception){
             Log.w(TAG, "Error on get user groupId, error: ${e.message}")
             throw Exception("Can't get main user")
+        }
+    }
+
+    override suspend fun getGroupInviteCode(): String {
+        return try {
+            Log.d(TAG, "Getting groupInvitecode")
+            val groupId = sessionManager.getGroupId()!!
+            Log.d(TAG, "get groupId")
+            val group = firebaseToGroupDomain(groupId)
+            Log.d(TAG, "get group $group")
+            Log.d(TAG, "returning groupInvitecode ${group!!.groupInvite}")
+            group.groupInvite!!
+        } catch (e: Exception){
+            Log.w(TAG, "Error on get user groupId, error: $e")
+            throw Exception("Can't get group invite code")
         }
     }
 
@@ -135,10 +151,10 @@ internal class GroupRepositoryImpl @Inject constructor(
 
 
     private fun generateInviteCode(): String {
-        val characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        val characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         val codeLength = 6
 
-        val random = Random(System.currentTimeMillis())
+        val random = SecureRandom()
         val code = StringBuilder()
 
         for (i in 0 until codeLength) {
@@ -167,7 +183,7 @@ internal class GroupRepositoryImpl @Inject constructor(
 
     private suspend fun getFirebaseGroup(groupId: String) : DocumentSnapshot?{
         return try {
-            firebaseFirestore.collection("group")
+            firebaseFirestore.collection("groups")
                 .document(groupId)
                 .get()
                 .await()
@@ -177,7 +193,8 @@ internal class GroupRepositoryImpl @Inject constructor(
         }
     }
     private suspend fun firebaseToGroupDomain(groupId: String) : GroupDomain? {
-        return getFirebaseGroup(groupId)!!.toObject(GroupDomain::class.java)
+        val docFirebase = getFirebaseGroup(groupId)
+        return docFirebase?.toObject(GroupDomain::class.java)
     }
 
 

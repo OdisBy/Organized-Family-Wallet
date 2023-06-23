@@ -12,7 +12,7 @@ interface GroupRepository {
     suspend fun getUsers(): List<GroupUsersDomain?>
 
     suspend fun getUserGroupId(): String
-
+    suspend fun getGroupInviteCode(): String
     suspend fun createGroupDomain(groupUsersDomain: GroupUsersDomain): GroupDomain
 
     suspend fun getGroupBalance(): Double
