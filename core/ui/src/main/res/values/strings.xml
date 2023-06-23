@@ -4,4 +4,8 @@
     <string name="app_icon_text">Icone Aplicativo</string>
     <string name="back_button">Botão de voltar</string>
 
+
+
+    <!-- Deep links -->
+    <string name="login_deep_link" translatable="false">organized-app://com.ruliam.organizedfw/signin</string>
 </resources>

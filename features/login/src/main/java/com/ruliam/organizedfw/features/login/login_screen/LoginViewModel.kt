@@ -18,8 +18,6 @@ class LoginViewModel @Inject constructor(
     private val _signInState = MutableStateFlow<SignInResult>(SignInResult.Empty)
     val signInState: StateFlow<SignInResult> = _signInState
 
-    var startLogged = false
-
     fun loginUser(email: String, password: String) = viewModelScope.launch {
         _signInState.value = SignInResult.Loading
         try {
@@ -32,10 +30,6 @@ class LoginViewModel @Inject constructor(
 
     fun createLoginSession(userId: String, groupId: String){
         authRepository.createLoginSession(userId, groupId)
-    }
-
-    fun isLogged() = viewModelScope.launch {
-        startLogged = authRepository.checkLogin()
     }
 
     companion object{

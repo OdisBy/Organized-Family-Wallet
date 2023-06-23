@@ -3,6 +3,7 @@ package com.ruliam.organizedfw.features.home
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.*
+import com.ruliam.organizedfw.core.data.repository.AuthRepository
 import com.ruliam.organizedfw.core.data.repository.AvatarRepository
 import com.ruliam.organizedfw.features.home.domain.GetBalanceUseCase
 import com.ruliam.organizedfw.features.home.domain.GetFinancesOfMonthUseCase
@@ -25,14 +26,23 @@ class HomeFragmentViewModel @Inject constructor(
     private val usersRepository: UsersRepository,
     private val getFinancesOfMonthUseCase: GetFinancesOfMonthUseCase,
     private val getBalanceUseCase: GetBalanceUseCase,
-    private val avatarRepository: AvatarRepository
+    private val avatarRepository: AvatarRepository,
+    private val authRepository: AuthRepository
 ) :
     ViewModel() {
 
     private val _uiState = MutableStateFlow<UiStateFlow<UiState>>(UiStateFlow.Empty())
     val uiState: StateFlow<UiStateFlow<UiState>> = _uiState
 
+    private val _signInState = MutableStateFlow(false)
+    val signInState: StateFlow<Boolean> = _signInState
+
     internal val amountUtils = AmountUtils()
+
+
+    fun isLogged() = viewModelScope.launch {
+        _signInState.value = authRepository.checkLogin()
+    }
 
     data class UiState(
         val balanceCardList: List<BalanceCardItem>,

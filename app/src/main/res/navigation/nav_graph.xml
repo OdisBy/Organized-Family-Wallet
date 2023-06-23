@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/home_nav">
 
+    <include app:graph="@navigation/home_nav" />
     <include app:graph="@navigation/form_nav" />
     <include app:graph="@navigation/group_nav" />
     <include app:graph="@navigation/settings_graph" />
+
 
     <fragment
         android:id="@+id/loginFragment"
@@ -29,7 +31,7 @@
 
         <deepLink
             android:id="@+id/deepLink"
-            app:uri="organized-app://com.ruliam.organizedfw/signin" />
+            app:uri="@string/login_deep_link" />
     </fragment>
 
     <fragment
@@ -48,17 +50,6 @@
         <deepLink
             android:id="@+id/deepLink"
             app:uri="organized-app://com.ruliam.organizedfw/register_information" />
-    </fragment>
-
-    <fragment
-            android:id="@+id/homeFragment"
-            android:name="com.ruliam.organizedfw.features.home.HomeFragment"
-            android:label="Home Fragment"
-            tools:layout="@layout/fragment_home">
-
-            <deepLink
-                android:id="@+id/deepLink"
-                app:uri="organized-app://com.ruliam.organizedfw/home" />
     </fragment>
 
     <fragment

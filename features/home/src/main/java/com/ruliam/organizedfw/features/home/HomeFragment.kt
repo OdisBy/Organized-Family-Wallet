@@ -2,6 +2,7 @@ package com.ruliam.organizedfw.features.home
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.PopupMenu
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -14,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.NavDeepLinkRequest
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -43,9 +45,23 @@ class HomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[HomeFragmentViewModel::class.java]
 
+        navController = findNavController()
+
+        val currentBackStackEntry = navController.currentBackStackEntry!!
+        val savedStateHandle = currentBackStackEntry.savedStateHandle
+        savedStateHandle.getLiveData<Boolean>(LOGIN_SUCCESSFUL)
+            .observe(currentBackStackEntry) { success ->
+                if (!success) {
+                    val startDestination = navController.currentDestination!!.id
+                    val navOptions = NavOptions.Builder()
+                        .setPopUpTo(startDestination, true)
+                        .build()
+                    navController.navigate(startDestination, null, navOptions)
+                }
+            }
+
         financesAdapter = FinancesListAdapter(viewModel)
         balanceAdapter = BalanceListAdapter()
-        navController = findNavController()
     }
 
 
@@ -61,6 +77,22 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.isLogged()
+        lifecycleScope.launch {
+            viewModel.signInState
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { isLogged ->
+                    if(!isLogged){
+                        val request = NavDeepLinkRequest.Builder
+                            .fromUri("organized-app://com.ruliam.organizedfw/signin".toUri())
+                            .build()
+                        navController.navigate(request)
+                    } else {
+                        viewModel.getUiState()
+                    }
+                }
+        }
+
         binding.bottomInclude.financesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.bottomInclude.financesRecyclerView.adapter = financesAdapter
         binding.balanceRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -137,11 +169,11 @@ class HomeFragment : Fragment() {
                 }
         }
     }
-    override fun onResume() {
-        super.onResume()
-        viewModel.getUiState()
-//        binding.bottomAppBar.bottomNavigation.selectedItemId = R.id.homeFragment
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        viewModel.getUiState()
+////        binding.bottomAppBar.bottomNavigation.selectedItemId = R.id.homeFragment
+//    }
 
     private fun bindFinances(finances: List<ListItemType>) {
         financesAdapter.updateFinances(finances)
@@ -177,6 +209,11 @@ class HomeFragment : Fragment() {
             true
         }
         popup.show()
+    }
+
+    companion object {
+        const val LOGIN_SUCCESSFUL = "LOGIN_SUCCESSFUL"
+        const val TAG = "HomeFragment"
     }
 
 }

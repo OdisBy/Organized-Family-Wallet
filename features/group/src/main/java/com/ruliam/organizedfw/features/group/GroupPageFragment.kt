@@ -16,9 +16,12 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.ruliam.organizedfw.core.ui.R
 import com.ruliam.organizedfw.features.group.databinding.FragmentGroupPageBinding
@@ -33,6 +36,27 @@ class GroupPageFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: GroupPageViewModel by viewModels()
+
+    private lateinit var navController: NavController
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        navController = findNavController()
+
+        val currentBackStackEntry = navController.currentBackStackEntry!!
+        val savedStateHandle = currentBackStackEntry.savedStateHandle
+        savedStateHandle.getLiveData<Boolean>(LOGIN_SUCCESSFUL)
+            .observe(currentBackStackEntry) { success ->
+                if (!success) {
+                    val startDestination = navController.currentDestination!!.id
+                    val navOptions = NavOptions.Builder()
+                        .setPopUpTo(startDestination, true)
+                        .build()
+                    navController.navigate(startDestination, null, navOptions)
+                }
+            }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -129,6 +153,7 @@ class GroupPageFragment : Fragment() {
     }
 
     companion object {
+        const val LOGIN_SUCCESSFUL = "LOGIN_SUCCESSFUL"
         const val TAG = "GroupPageFragment"
     }
 

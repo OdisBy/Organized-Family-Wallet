@@ -36,8 +36,6 @@ class LoginFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
-
-        viewModel.isLogged()
     }
 
     override fun onCreateView(
@@ -58,18 +56,8 @@ class LoginFragment : Fragment() {
 
         binding.progressBar.visibility = View.INVISIBLE
 
-        if(viewModel.startLogged){
-            navigateToHomeFragment()
-        }
-
         binding.signUpButton.setOnClickListener {
-//            val request = NavDeepLinkRequest.Builder
-//                .fromUri("organized-app://com.ruliam.organizedfw/signup".toUri())
-//                .build()
-//            val request = NavDeepLinkBuilder(requireContext())
-//                .setDestination()
             findNavController().navigate(R.id.action_login_to_sign_up)
-//            findNavController().navigate(com.ruliam.organizedfw.core.ui.R.id.action_login_to_sign_up)
         }
 
         binding.emailSignIn.setOnClickListener {
@@ -121,23 +109,14 @@ class LoginFragment : Fragment() {
 
     private fun signSuccess(signInState: SignInResult.Success) {
         binding.progressBar.visibility = View.INVISIBLE
-        userLogged(signInState.userId, signInState.groupId)
+        viewModel.createLoginSession(signInState.userId, signInState.groupId)
         savedStateHandle.set(LOGIN_SUCCESSFUL, true)
         findNavController().popBackStack()
-    }
-
-    private fun userLogged(userId: String, groupId: String) {
-        viewModel.createLoginSession(userId, groupId)
-//        navigateToHomeFragment()
     }
 
     private fun clearErrors(){
         binding.emailInput.error = null
         binding.passwordInput.error = null
-    }
-
-    private fun navigateToHomeFragment() {
-        findNavController().navigate(R.id.action_login_to_home)
     }
 
     private fun navigateCompleteAccount() {
