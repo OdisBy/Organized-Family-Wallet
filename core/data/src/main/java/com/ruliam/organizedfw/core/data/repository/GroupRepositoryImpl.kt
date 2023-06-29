@@ -12,7 +12,6 @@ import com.ruliam.organizedfw.core.data.util.DoesNotExist
 import kotlinx.coroutines.tasks.await
 import java.security.SecureRandom
 import javax.inject.Inject
-import kotlin.random.Random
 
 internal class GroupRepositoryImpl @Inject constructor(
     private val sessionManager: SessionManager,
@@ -76,7 +75,8 @@ internal class GroupRepositoryImpl @Inject constructor(
             return GroupDomain(
                 id = null,
                 groupInvite = groupInvite,
-                users = mutableListOf(groupUsersDomain)
+                users = mutableListOf(groupUsersDomain),
+                pendingUsers = mutableListOf()
             )
 
         } catch (e: Exception) {
@@ -117,7 +117,28 @@ internal class GroupRepositoryImpl @Inject constructor(
             Log.w(TAG, "Error on add user to group, error: ${e.message}")
             throw CanNotAddFirebase("Group does not exist")
         }
+    }
 
+    override suspend fun getGroupDomainById(groupId: String): GroupDomain {
+        try {
+            val groupRef = firebaseFirestore.collection("groups")
+
+            val groupSnapshot = groupRef.whereEqualTo("id", groupId)
+                .limit(1)
+                .get()
+                .await()
+
+            if(!groupSnapshot.isEmpty){
+                return groupSnapshot.documents
+                    .firstOrNull()!!
+                    .toObject(GroupDomain::class.java)!!
+            } else {
+                throw DoesNotExist("Group does not exist")
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Error on add user to group, error: ${e.message}")
+            throw CanNotAddFirebase("Group does not exist")
+        }
     }
 
     override suspend fun removeUserOfGroup(userId: String) {
@@ -130,8 +151,22 @@ internal class GroupRepositoryImpl @Inject constructor(
         return !mainUser?.groupId.isNullOrEmpty()
     }
 
-    override suspend fun askEnterGroup() {
-        TODO("Not yet implemented")
+    override suspend fun askEnterGroup(inviteCode: String) {
+        val actualGroupId = sessionManager.getGroupId()!!
+        val actualGroup = getGroupDomainById(actualGroupId)
+        val newGroup = getGroupDomain(inviteCode)
+        val userId = sessionManager.getUserId()
+        val userGroupDomain = actualGroup.users.firstOrNull { it.id == userId}
+
+
+        val groupMutableUsers = newGroup.pendingUsers.toMutableList()
+        groupMutableUsers.add(userGroupDomain)
+
+        val groupRef = firebaseFirestore.collection("groups").document(actualGroupId)
+
+        firebaseFirestore.runBatch { batch ->
+            groupRef.update("pendingUsers", groupMutableUsers)
+        }
     }
 
 
@@ -182,6 +217,19 @@ internal class GroupRepositoryImpl @Inject constructor(
         return docFirebase?.toObject(GroupDomain::class.java)
     }
 
+
+
+    private suspend fun getGroupUserDomain(userId: String, groupId: String) : DocumentSnapshot?{
+        return try {
+            firebaseFirestore.collection("groups")
+                .document(groupId)
+                .get()
+                .await()
+        } catch (e: Exception) {
+            Log.w(UsersRepositoryImpl.TAG, "Error on try to get user with id $userId, error: ${e.message}")
+            return null
+        }
+    }
 
     companion object{
         const val TAG = "GroupRepository"

@@ -18,9 +18,10 @@ interface GroupRepository {
     suspend fun getGroupBalance(): Double
 
     suspend fun getGroupDomain(groupInvite: String): GroupDomain
+    suspend fun getGroupDomainById(groupId: String): GroupDomain
 
     suspend fun removeUserOfGroup(userId: String)
 
     suspend fun hasGroup(): Boolean
-    suspend fun askEnterGroup()
+    suspend fun askEnterGroup(inviteCode: String)
 }

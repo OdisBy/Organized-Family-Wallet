@@ -1,17 +1,12 @@
 package com.ruliam.organizedfw.features.group
 
-import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.ruliam.organizedfw.core.data.model.GroupUsersDomain
 import com.ruliam.organizedfw.core.data.repository.AuthRepository
 import com.ruliam.organizedfw.core.data.repository.GroupRepository
-import com.ruliam.organizedfw.core.data.repository.UsersRepository
-import com.ruliam.organizedfw.core.data.util.SignInResult
 import com.ruliam.organizedfw.core.data.util.UiStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -80,7 +75,8 @@ class GroupPageViewModel @Inject constructor(
     }
 
     fun askForEnterGroup() = viewModelScope.launch {
-        groupRepository.askEnterGroup()
+        val inviteCode = state.get<String>("groupID")
+        groupRepository.askEnterGroup(inviteCode!!)
     }
 
     fun checkGroupId(): Boolean {
