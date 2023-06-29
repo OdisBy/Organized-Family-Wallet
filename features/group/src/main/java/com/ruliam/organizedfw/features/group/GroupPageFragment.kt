@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
@@ -23,9 +24,14 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import com.ruliam.organizedfw.core.data.model.GroupUsersDomain
+import com.ruliam.organizedfw.core.data.util.UiStateFlow
 import com.ruliam.organizedfw.core.ui.R
 import com.ruliam.organizedfw.features.group.databinding.FragmentGroupPageBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -58,6 +64,8 @@ class GroupPageFragment : Fragment() {
                     navController.navigate(startDestination, null, navOptions)
                 }
             }
+
+        usersAdapter = UsersListAdapter()
     }
 
     override fun onCreateView(
@@ -78,8 +86,9 @@ class GroupPageFragment : Fragment() {
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collect { isLogged ->
                     if(isLogged){
-                        getGroupId()
-                        binding.groupInviteCode.text = viewModel.groupId
+//                        getGroupId()
+//                        binding.groupInviteCode.text = viewModel.groupId
+                        viewModel.getUiState()
                     } else{
                         val request = NavDeepLinkRequest.Builder
                             .fromUri("organized-app://com.ruliam.organizedfw/signin".toUri())
@@ -88,6 +97,34 @@ class GroupPageFragment : Fragment() {
                     }
                 }
         }
+
+        lifecycleScope.launch {
+            viewModel.uiState
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { uiState ->
+                    when(uiState){
+                        is UiStateFlow.Error -> {
+                            Snackbar.make(
+                                binding.root,
+                                uiState.message,
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                        }
+                        is UiStateFlow.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                        }
+                        is UiStateFlow.Success -> {
+                            binding.progressBar.visibility = View.INVISIBLE
+                            bindUsers(uiState.data!!.usersList)
+                            bindInviteCode(uiState.data!!.groupInviteCode)
+                        }
+                        else -> Unit
+                    }
+                }
+        }
+
+        binding.usersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.usersRecyclerView.adapter = usersAdapter
 
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
@@ -100,8 +137,8 @@ class GroupPageFragment : Fragment() {
 
     }
 
-    private suspend fun getGroupId() {
-        viewModel.getGroupId()
+    private fun bindInviteCode(inviteCode: String) {
+        binding.groupInviteCode.text = inviteCode
     }
 
     private fun shareInviteCode() {
@@ -120,6 +157,10 @@ class GroupPageFragment : Fragment() {
         } catch (e: Exception){
             Log.w(TAG, "Error on share invite code: ${e.localizedMessage}")
         }
+    }
+
+    private fun bindUsers(users: List<GroupUsersDomain?>) {
+        usersAdapter.updateUsers(users)
     }
 
     private fun copyCodeToClipboard() {

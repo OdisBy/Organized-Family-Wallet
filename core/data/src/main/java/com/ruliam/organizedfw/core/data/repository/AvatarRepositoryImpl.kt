@@ -1,26 +1,26 @@
 package com.ruliam.organizedfw.core.data.repository
 
-import android.R.attr.bitmap
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
 import com.ruliam.organizedfw.core.data.avatar.UserAvatar
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 import javax.inject.Inject
 
 
 internal class AvatarRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val firebaseStorage: FirebaseStorage,
-    private val userAvatar: UserAvatar
+    private val userAvatar: UserAvatar,
+    @ApplicationContext private val context: Context
 ) : AvatarRepository {
 
     private val storage = firebaseStorage.reference
@@ -68,14 +68,16 @@ internal class AvatarRepositoryImpl @Inject constructor(
         return userAvatar.generateUserAvatar(username)
     }
 
-    override suspend fun getAvatarByUri(uri: String): Bitmap? {
-        return try {
-            val inputStream = URL(uri).openStream()
-            BitmapFactory.decodeStream(inputStream)
-        } catch (e: IOException) {
-            Log.w(TAG, "Error on get avatar by uri")
-            e.printStackTrace();
-            null
+    override suspend fun getAvatarByUrl(url: String): Bitmap? {
+        try {
+            return Glide.with(context)
+                .asBitmap()
+                .load("url")
+                .submit()
+                .get()
+        } catch (e: Exception) {
+            e.stackTrace
+            throw Exception("Can't get avatar image")
         }
     }
 

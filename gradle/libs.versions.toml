@@ -58,7 +58,7 @@ runnerVersion = "1.5.2"
 junit = "1.1.5"
 
 # Other
-
+glideversion = "4.15.1"
 
 
 
@@ -125,6 +125,7 @@ squareup-retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", ver
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
 
 # Other
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glideversion"}
 
 
 [bundles]

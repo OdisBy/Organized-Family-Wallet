@@ -11,10 +11,15 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object SessionModule {
+object AppModule {
     @Singleton
     @Provides
     fun providesSharedPreferences(@ApplicationContext context: Context): SharedPreferences{
         return context.getSharedPreferences("userId", Context.MODE_PRIVATE)
+    }
+
+    @Provides
+    fun provideApplicationContext(context: Context): Context {
+        return context.applicationContext
     }
 }

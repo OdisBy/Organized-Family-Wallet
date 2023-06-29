@@ -10,5 +10,5 @@ interface AvatarRepository {
 
     suspend fun generateAvatar(username: String): Bitmap
 
-    suspend fun getAvatarByUri(uri: String): Bitmap?
+    suspend fun getAvatarByUrl(url: String): Bitmap?
 }
