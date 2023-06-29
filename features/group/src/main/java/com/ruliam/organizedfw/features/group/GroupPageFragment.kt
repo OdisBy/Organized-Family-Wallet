@@ -39,6 +39,8 @@ class GroupPageFragment : Fragment() {
 
     private lateinit var navController: NavController
 
+    private lateinit var usersAdapter: UsersListAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

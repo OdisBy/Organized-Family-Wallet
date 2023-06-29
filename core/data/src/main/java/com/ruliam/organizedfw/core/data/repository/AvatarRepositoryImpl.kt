@@ -1,5 +1,6 @@
 package com.ruliam.organizedfw.core.data.repository
 
+import android.R.attr.bitmap
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -10,7 +11,11 @@ import com.google.firebase.storage.StorageException
 import com.ruliam.organizedfw.core.data.avatar.UserAvatar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 import javax.inject.Inject
+
 
 internal class AvatarRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
@@ -61,6 +66,17 @@ internal class AvatarRepositoryImpl @Inject constructor(
 
     override suspend fun generateAvatar(username: String): Bitmap {
         return userAvatar.generateUserAvatar(username)
+    }
+
+    override suspend fun getAvatarByUri(uri: String): Bitmap? {
+        return try {
+            val inputStream = URL(uri).openStream()
+            BitmapFactory.decodeStream(inputStream)
+        } catch (e: IOException) {
+            Log.w(TAG, "Error on get avatar by uri")
+            e.printStackTrace();
+            null
+        }
     }
 
 
