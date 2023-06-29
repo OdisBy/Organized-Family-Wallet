@@ -22,4 +22,5 @@ interface GroupRepository {
     suspend fun removeUserOfGroup(userId: String)
 
     suspend fun hasGroup(): Boolean
+    suspend fun askEnterGroup()
 }

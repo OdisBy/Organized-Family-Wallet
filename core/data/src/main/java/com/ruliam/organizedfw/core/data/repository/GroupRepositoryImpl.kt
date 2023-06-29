@@ -44,7 +44,6 @@ internal class GroupRepositoryImpl @Inject constructor(
         }
     }
 
-
     override suspend fun getUserGroupId(): String {
         return try {
             val userId = sessionManager.getUserId()
@@ -111,24 +110,6 @@ internal class GroupRepositoryImpl @Inject constructor(
                 return groupSnapshot.documents
                     .firstOrNull()!!
                     .toObject(GroupDomain::class.java)!!
-
-
-
-//                val groupId = documentSnapshot!!.id
-//
-//                val usersGroup = documentSnapshot.get("users") as? MutableList<GroupUsersDomain>
-//
-//                usersGroup!!.add(groupUserDomain)
-//
-//                val updatedData = hashMapOf<String, Any>("users" to usersGroup)
-//
-//                groupRef.document(groupId)
-//                    .update(updatedData)
-//                    .await()
-//
-//                Log.d(TAG, "User added to group successfully")
-//                return groupId
-
             } else {
                 throw DoesNotExist("Group does not exist")
             }
@@ -147,6 +128,10 @@ internal class GroupRepositoryImpl @Inject constructor(
         val userId = sessionManager.getUserId()
         val mainUser = firebaseToUserDomain(userId)
         return !mainUser?.groupId.isNullOrEmpty()
+    }
+
+    override suspend fun askEnterGroup() {
+        TODO("Not yet implemented")
     }
 
 

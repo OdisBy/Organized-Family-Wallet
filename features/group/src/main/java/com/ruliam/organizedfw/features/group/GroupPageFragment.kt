@@ -5,19 +5,16 @@ import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.os.Build
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -25,15 +22,14 @@ import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.ruliam.organizedfw.core.data.model.GroupUsersDomain
 import com.ruliam.organizedfw.core.data.util.UiStateFlow
 import com.ruliam.organizedfw.core.ui.R
 import com.ruliam.organizedfw.features.group.databinding.FragmentGroupPageBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class GroupPageFragment : Fragment() {
@@ -117,6 +113,10 @@ class GroupPageFragment : Fragment() {
                             binding.progressBar.visibility = View.INVISIBLE
                             bindUsers(uiState.data!!.usersList)
                             bindInviteCode(uiState.data!!.groupInviteCode)
+
+                            if(viewModel.checkGroupId()){
+                                confirmNewGroup()
+                            }
                         }
                         else -> Unit
                     }
@@ -131,9 +131,22 @@ class GroupPageFragment : Fragment() {
         }
 
         binding.groupInviteCodeLayout.setOnClickListener {
-//            copyCodeToClipboard()
             shareInviteCode()
         }
+    }
+
+    private fun confirmNewGroup() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(resources.getString(com.ruliam.organizedfw.features.group.R.string.enter_new_group_title))
+            .setMessage(resources.getString(com.ruliam.organizedfw.features.group.R.string.enter_new_group_msg))
+            .setNegativeButton("Cancelar") { dialog, which ->
+                // Respond to negative button press
+            }
+            .setPositiveButton("Confirmar") { dialog, which ->
+                // Respond to positive button press
+                viewModel.askForEnterGroup()
+            }
+            .show()
 
     }
 
