@@ -3,4 +3,6 @@
     <string name="invite_group_code_desc">Código de convite para o grupo</string>
     <string name="enter_new_group_title">Você deseja mudar de grupo?</string>
     <string name="enter_new_group_msg">Você deseja entrar em um novo grupo? \nIsso irá remover você do seu grupo atual quando for aceito.</string>
+    <string name="enter_new_group_title_confirm">Agora é só esperar!</string>
+    <string name="enter_new_group_msg_confirm">Peça para que o alguém do grupo aceite seu pedido para entrar no grupo.</string>
 </resources>

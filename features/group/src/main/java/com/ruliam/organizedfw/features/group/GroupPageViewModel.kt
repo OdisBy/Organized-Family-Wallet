@@ -26,7 +26,7 @@ class GroupPageViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiStateFlow<UiState>>(UiStateFlow.Empty())
     val uiState: StateFlow<UiStateFlow<UiState>> = _uiState
 
-    private var shouldOpenDialog: Boolean = false
+    var shouldOpenDialog: Boolean = false
 
 
     fun isLogged() = viewModelScope.launch {
@@ -77,10 +77,6 @@ class GroupPageViewModel @Inject constructor(
     fun askForEnterGroup() = viewModelScope.launch {
         val inviteCode = state.get<String>("groupID")
         groupRepository.askEnterGroup(inviteCode!!)
-    }
-
-    fun checkGroupId(): Boolean {
-        return shouldOpenDialog
     }
 
 

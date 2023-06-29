@@ -158,8 +158,9 @@ internal class GroupRepositoryImpl @Inject constructor(
         val userId = sessionManager.getUserId()
         val userGroupDomain = actualGroup.users.firstOrNull { it.id == userId}
 
-
         val groupMutableUsers = newGroup.pendingUsers.toMutableList()
+        groupMutableUsers.firstOrNull { it?.id == userId } ?: return
+
         groupMutableUsers.add(userGroupDomain)
 
         val groupRef = firebaseFirestore.collection("groups").document(actualGroupId)

@@ -7,12 +7,12 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -114,7 +114,7 @@ class GroupPageFragment : Fragment() {
                             bindUsers(uiState.data!!.usersList)
                             bindInviteCode(uiState.data!!.groupInviteCode)
 
-                            if(viewModel.checkGroupId()){
+                            if(viewModel.shouldOpenDialog){
                                 confirmNewGroup()
                             }
                         }
@@ -136,6 +136,7 @@ class GroupPageFragment : Fragment() {
     }
 
     private fun confirmNewGroup() {
+        viewModel.shouldOpenDialog = false
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(resources.getString(com.ruliam.organizedfw.features.group.R.string.enter_new_group_title))
             .setMessage(resources.getString(com.ruliam.organizedfw.features.group.R.string.enter_new_group_msg))
@@ -145,9 +146,19 @@ class GroupPageFragment : Fragment() {
             .setPositiveButton("Confirmar") { dialog, which ->
                 // Respond to positive button press
                 viewModel.askForEnterGroup()
+                confirmMessageDialog()
             }
             .show()
 
+    }
+
+    private fun confirmMessageDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(resources.getString(com.ruliam.organizedfw.features.group.R.string.enter_new_group_title_confirm))
+            .setMessage(resources.getString(com.ruliam.organizedfw.features.group.R.string.enter_new_group_msg_confirm))
+            .setPositiveButton("OK") { dialog, which ->
+            }
+            .show()
     }
 
     private fun bindInviteCode(inviteCode: String) {
