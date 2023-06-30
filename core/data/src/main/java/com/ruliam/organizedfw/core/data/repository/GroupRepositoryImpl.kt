@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ruliam.organizedfw.core.data.model.GroupDomain
-import com.ruliam.organizedfw.core.data.model.GroupUsersDomain
+import com.ruliam.organizedfw.core.data.model.GroupUserDomain
 import com.ruliam.organizedfw.core.data.model.UserDomain
 import com.ruliam.organizedfw.core.data.session.SessionManager
 import com.ruliam.organizedfw.core.data.util.CanNotAddFirebase
@@ -17,25 +17,39 @@ internal class GroupRepositoryImpl @Inject constructor(
     private val sessionManager: SessionManager,
     private val firebaseFirestore: FirebaseFirestore
 ) : GroupRepository {
-    override suspend fun getUsers(): List<GroupUsersDomain?> {
-        val groupId = getUserGroupId()
-        val userId = sessionManager.getUserId()
 
-        return try {
+    private var mainGroup: GroupDomain? = null
+
+    private suspend fun getMainGroup() {
+        val groupId = getUserGroupId()
+        try {
             val groupSnapshot = firebaseFirestore.collection("groups")
                 .document(groupId)
                 .get()
                 .await()
 
-            val group = groupSnapshot.toObject(GroupDomain::class.java)
-            val mainUser = group?.users?.firstOrNull { it.id == userId }
-            val otherUsers = group?.users?.filterNot { it.id == userId }
+            mainGroup = groupSnapshot.toObject(GroupDomain::class.java)!!
+        } catch (e: Exception) {
+            Log.w(TAG, "Error retrieving users from group $groupId. Error: ${e.message}")
+            throw Exception("error isn't in a group")
+        }
+    }
 
-            mutableListOf<GroupUsersDomain?>().apply {
+
+    override suspend fun getUsers(): List<GroupUserDomain> {
+        val groupId = getUserGroupId()
+        val userId = getUserId()
+
+        return try {
+            if(mainGroup == null){
+                getMainGroup()
+            }
+            val mainUser = mainGroup!!.users.first { it.id == userId }
+            val otherUsers = mainGroup!!.users.filterNot { it.id == userId }
+
+            mutableListOf<GroupUserDomain>().apply {
                 add(mainUser)
-                if (otherUsers != null) {
-                    addAll(otherUsers)
-                }
+                addAll(otherUsers)
             }
         } catch (e: Exception) {
             Log.w(TAG, "Error retrieving users from group $groupId. Error: ${e.message}")
@@ -43,57 +57,35 @@ internal class GroupRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun checkIfPendingUsers(): List<GroupUserDomain?> {
+        return mainGroup?.pendingUsers ?: listOf()
+    }
+
     override suspend fun getUserGroupId(): String {
-        return try {
-            val userId = sessionManager.getUserId()
-            val mainUser = firebaseToUserDomain(userId)
-            mainUser!!.groupId
-        } catch (e: Exception){
-            Log.w(TAG, "Error on get user groupId, error: ${e.message}")
-            throw Exception("Can't get main user")
-        }
+        return sessionManager.getGroupId()!!
     }
 
     override suspend fun getGroupInviteCode(): String {
-        return try {
-            Log.d(TAG, "Getting groupInvitecode")
-            val groupId = sessionManager.getGroupId()!!
-            Log.d(TAG, "get groupId")
-            val group = firebaseToGroupDomain(groupId)
-            Log.d(TAG, "get group $group")
-            Log.d(TAG, "returning groupInvitecode ${group!!.groupInvite}")
-            group.groupInvite!!
-        } catch (e: Exception){
-            Log.w(TAG, "Error on get user groupId, error: $e")
-            throw Exception("Can't get group invite code")
-        }
+        return mainGroup!!.groupInvite!!
     }
 
-    override suspend fun createGroupDomain(groupUsersDomain: GroupUsersDomain): GroupDomain {
-        try {
-            val groupInvite = generateInviteCode()
-            return GroupDomain(
-                id = null,
-                groupInvite = groupInvite,
-                users = mutableListOf(groupUsersDomain),
-                pendingUsers = mutableListOf()
-            )
-
-        } catch (e: Exception) {
-            Log.w(TAG, "Error on create group, error: ${e.message}")
-            throw Exception("Cant create group")
-        }
+    override suspend fun createGroupDomain(groupUserDomain: GroupUserDomain): GroupDomain {
+        val groupInvite = generateInviteCode()
+        return GroupDomain(
+            id = null,
+            groupInvite = groupInvite,
+            users = mutableListOf(groupUserDomain),
+            pendingUsers = mutableListOf()
+        )
     }
 
     override suspend fun getGroupBalance(): Double {
         val totalBalance = 0.0
-
         val users = getUsers()
         for (user in users){
-            val balance = user!!.balance
+            val balance = user.balance
             totalBalance.plus(balance)
         }
-
         return totalBalance
     }
 
@@ -218,19 +210,23 @@ internal class GroupRepositoryImpl @Inject constructor(
         return docFirebase?.toObject(GroupDomain::class.java)
     }
 
-
-
-    private suspend fun getGroupUserDomain(userId: String, groupId: String) : DocumentSnapshot?{
-        return try {
-            firebaseFirestore.collection("groups")
-                .document(groupId)
-                .get()
-                .await()
-        } catch (e: Exception) {
-            Log.w(UsersRepositoryImpl.TAG, "Error on try to get user with id $userId, error: ${e.message}")
-            return null
-        }
+    private fun getUserId(): String {
+        return sessionManager.getUserId()
     }
+
+
+
+//    private suspend fun getGroupUserDomain(groupId: String) : DocumentSnapshot?{
+//        return try {
+//            firebaseFirestore.collection("groups")
+//                .document(groupId)
+//                .get()
+//                .await()
+//        } catch (e: Exception) {
+//            Log.w(UsersRepositoryImpl.TAG, "Error on try to get user with id $userId, error: ${e.message}")
+//            return null
+//        }
+//    }
 
     companion object{
         const val TAG = "GroupRepository"
