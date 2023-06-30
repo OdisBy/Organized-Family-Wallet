@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.ruliam.organizedfw.core.data.model.GroupUsersDomain
+import com.ruliam.organizedfw.core.data.model.GroupUserDomain
 import com.ruliam.organizedfw.features.group.databinding.UsersCardViewBinding
 
 /**
@@ -19,7 +19,7 @@ import com.ruliam.organizedfw.features.group.databinding.UsersCardViewBinding
  */
 class UsersListAdapter : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
 
-    private val asyncListDiffer: AsyncListDiffer<GroupUsersDomain> = AsyncListDiffer(this, DiffCallback)
+    private val asyncListDiffer: AsyncListDiffer<GroupUserDomain> = AsyncListDiffer(this, DiffCallback)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,7 +34,7 @@ class UsersListAdapter : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int = asyncListDiffer.currentList.size
 
-    fun updateUsers(users: List<GroupUsersDomain?>){
+    fun updateUsers(users: List<GroupUserDomain?>){
         asyncListDiffer.submitList(users)
     }
 
@@ -43,9 +43,7 @@ class UsersListAdapter : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
         private val binding: UsersCardViewBinding,
         private val context: Context
     ) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: GroupUsersDomain) {
-
+        fun bind(item: GroupUserDomain) {
             // Set profile image
             Glide.with(context)
                 .asBitmap()
@@ -60,18 +58,14 @@ class UsersListAdapter : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
                 })
 
             binding.username.text = item.username
-
         }
     }
 
-
-    object DiffCallback : DiffUtil.ItemCallback<GroupUsersDomain>() {
-
-        override fun areItemsTheSame(oldItem: GroupUsersDomain, newItem: GroupUsersDomain): Boolean {
+    object DiffCallback : DiffUtil.ItemCallback<GroupUserDomain>() {
+        override fun areItemsTheSame(oldItem: GroupUserDomain, newItem: GroupUserDomain): Boolean {
             return oldItem.id == newItem.id
         }
-
-        override fun areContentsTheSame(oldItem: GroupUsersDomain, newItem: GroupUsersDomain): Boolean {
+        override fun areContentsTheSame(oldItem: GroupUserDomain, newItem: GroupUserDomain): Boolean {
             return oldItem == newItem
         }
     }

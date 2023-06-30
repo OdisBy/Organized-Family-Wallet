@@ -1,6 +1,6 @@
 package com.ruliam.organizedfw.core.data.model
 
-data class GroupUsersDomain (
+data class GroupUserDomain (
     val id: String,
     val username: String,
     var balance: Double,

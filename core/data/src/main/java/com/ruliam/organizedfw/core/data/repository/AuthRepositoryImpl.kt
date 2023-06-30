@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ruliam.organizedfw.core.data.model.GroupDomain
-import com.ruliam.organizedfw.core.data.model.GroupUsersDomain
+import com.ruliam.organizedfw.core.data.model.GroupUserDomain
 import com.ruliam.organizedfw.core.data.model.UserDomain
 import com.ruliam.organizedfw.core.data.session.SessionManager
 import com.ruliam.organizedfw.core.data.util.SignInResult
@@ -91,7 +91,7 @@ internal class AuthRepositoryImpl @Inject constructor(
                 profileUri = avatarUri
             )
 
-            val groupUserDomain = GroupUsersDomain(
+            val groupUserDomain = GroupUserDomain(
                 id = userId,
                 username = userDomain.username!!,
                 balance = 0.0,
@@ -134,7 +134,7 @@ internal class AuthRepositoryImpl @Inject constructor(
         sessionManager.createLoginSession(userId, groupId)
     }
 
-    private fun addUserToList(groupDomain: GroupDomain, groupUserDomain: GroupUsersDomain): List<GroupUsersDomain> {
+    private fun addUserToList(groupDomain: GroupDomain, groupUserDomain: GroupUserDomain): List<GroupUserDomain> {
         val mutable = groupDomain.users.toMutableList()
         mutable.add(groupUserDomain)
         return mutable

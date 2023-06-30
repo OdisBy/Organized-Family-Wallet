@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ruliam.organizedfw.core.data.model.GroupUsersDomain
+import com.ruliam.organizedfw.core.data.model.GroupUserDomain
 import com.ruliam.organizedfw.core.data.repository.AuthRepository
 import com.ruliam.organizedfw.core.data.repository.GroupRepository
 import com.ruliam.organizedfw.core.data.util.UiStateFlow
@@ -28,61 +28,59 @@ class GroupPageViewModel @Inject constructor(
 
     var shouldOpenDialog: Boolean = false
 
-
     fun isLogged() = viewModelScope.launch {
         _signInState.value = authRepository.checkLogin()
     }
 
-
-    private suspend fun getGroupId() : String {
-        val inviteCode = state.get<String>("groupID")
-        Log.d(TAG, "Invite code ${inviteCode ?: "none"}")
-
-        val groupId = groupRepository.getGroupInviteCode()
-
+    fun checkNewInviteCode() = viewModelScope.launch {
+        val inviteCode = state.get<String>("groupInviteCode")
+        Log.d(TAG, "check new invite code $inviteCode")
         if (inviteCode != null) {
-            if(inviteCode.isNotEmpty()){
-                return if(inviteCode == groupId){
+            if (inviteCode.isNotEmpty()) {
+
+                val groupInviteCode = groupRepository.getGroupInviteCode()
+
+                if (inviteCode == groupInviteCode) {
                     Log.d(TAG, "User tried to enter in the same group with a invite code")
-                    groupId
-                } else{
+                } else {
                     Log.d(TAG, "User trying to enter in a new group")
                     shouldOpenDialog = true
-                    groupId
                 }
             }
         }
+    }
 
-        return groupId
+    fun askForEnterGroup() = viewModelScope.launch {
+        val inviteCode = state.get<String>("groupInviteCode")
+        groupRepository.askEnterGroup(inviteCode!!)
     }
 
     fun getUiState() = viewModelScope.launch {
         _uiState.value = UiStateFlow.Loading()
 
         try{
-            val inviteCode = getGroupId()
+            val inviteCode = groupRepository.getGroupInviteCode()
             val users = groupRepository.getUsers()
+            val pendingUsers = groupRepository.checkIfPendingUsers()
             _uiState.value = UiStateFlow.Success(
                 UiState(
                     inviteCode,
-                    users
+                    users,
+                    pendingUsers
                 )
             )
         } catch (e: Exception){
-            Log.w(TAG, "Exception on getUiState")
+            e.stackTrace
+            Log.w(TAG, "Exception on getUiState: ${e.message}")
             _uiState.value = UiStateFlow.Error(e.message.toString())
         }
-    }
-
-    fun askForEnterGroup() = viewModelScope.launch {
-        val inviteCode = state.get<String>("groupID")
-        groupRepository.askEnterGroup(inviteCode!!)
     }
 
 
     data class UiState(
         val groupInviteCode: String,
-        val usersList: List<GroupUsersDomain?>
+        val usersList: List<GroupUserDomain>,
+        val pendingUsers: List<GroupUserDomain?>
     )
 
     companion object {

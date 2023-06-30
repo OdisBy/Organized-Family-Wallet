@@ -11,7 +11,6 @@
         android:label="Página do grupo"
         tools:layout="@layout/fragment_group_page">
 
-
         <deepLink
             android:id="@+id/deepLinkPage"
             app:uri="organized-app://com.ruliam.organizedfw.group/page" />
@@ -20,11 +19,24 @@
             android:autoVerify="true"
             android:id="@+id/deepLinkEnter"
             app:action="ACTION_VIEW"
-            app:uri="https://www.ruliams.live/join?code={groupID}" />
+            app:uri="https://www.ruliams.live/join?code={groupInviteCode}" />
         <argument
-            android:name="groupID"
+            android:name="groupInviteCode"
             app:argType="string"
             app:nullable="true" />
+
+        <action
+            android:id="@+id/action_groupPageFragment_to_pendingUsersFragment"
+            app:destination="@id/pendingUsersFragment"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/pendingUsersFragment"
+        android:name="com.ruliam.organizedfw.features.group.PendingUsersFragment"
+        android:label="Pending Users"
+        tools:layout="@layout/fragment_pending_users" >
+
     </fragment>
 
 </navigation>

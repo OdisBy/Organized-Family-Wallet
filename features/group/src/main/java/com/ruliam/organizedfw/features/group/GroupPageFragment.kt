@@ -24,7 +24,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.ruliam.organizedfw.core.data.model.GroupUsersDomain
+import com.ruliam.organizedfw.core.data.model.GroupUserDomain
 import com.ruliam.organizedfw.core.data.util.UiStateFlow
 import com.ruliam.organizedfw.core.ui.R
 import com.ruliam.organizedfw.features.group.databinding.FragmentGroupPageBinding
@@ -82,14 +82,13 @@ class GroupPageFragment : Fragment() {
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collect { isLogged ->
                     if(isLogged){
-//                        getGroupId()
-//                        binding.groupInviteCode.text = viewModel.groupId
+                        viewModel.checkNewInviteCode()
                         viewModel.getUiState()
                     } else{
                         val request = NavDeepLinkRequest.Builder
                             .fromUri("organized-app://com.ruliam.organizedfw/signin".toUri())
                             .build()
-                        findNavController().navigate(request)
+                        navController.navigate(request)
                     }
                 }
         }
@@ -113,6 +112,7 @@ class GroupPageFragment : Fragment() {
                             binding.progressBar.visibility = View.INVISIBLE
                             bindUsers(uiState.data!!.usersList)
                             bindInviteCode(uiState.data!!.groupInviteCode)
+                            bindPendingUsers(uiState.data!!.pendingUsers)
 
                             if(viewModel.shouldOpenDialog){
                                 confirmNewGroup()
@@ -127,12 +127,24 @@ class GroupPageFragment : Fragment() {
         binding.usersRecyclerView.adapter = usersAdapter
 
         binding.backButton.setOnClickListener {
-            findNavController().navigateUp()
+            navController.navigateUp()
         }
 
         binding.groupInviteCodeLayout.setOnClickListener {
             shareInviteCode()
         }
+
+        binding.pendingUsersButton.setOnClickListener {
+            navController.navigate(com.ruliam.organizedfw.features.group.R.id.action_groupPageFragment_to_pendingUsersFragment)
+        }
+    }
+
+    private fun bindPendingUsers(pendingUsers: List<GroupUserDomain?>) {
+        if(pendingUsers.isEmpty()){
+            binding.pendingUsersButton.visibility = View.GONE
+            return
+        }
+        binding.pendingUsersButton.visibility = View.VISIBLE
     }
 
     private fun confirmNewGroup() {
@@ -144,7 +156,6 @@ class GroupPageFragment : Fragment() {
                 // Respond to negative button press
             }
             .setPositiveButton("Confirmar") { dialog, which ->
-                // Respond to positive button press
                 viewModel.askForEnterGroup()
                 confirmMessageDialog()
             }
@@ -183,7 +194,7 @@ class GroupPageFragment : Fragment() {
         }
     }
 
-    private fun bindUsers(users: List<GroupUsersDomain?>) {
+    private fun bindUsers(users: List<GroupUserDomain?>) {
         usersAdapter.updateUsers(users)
     }
 

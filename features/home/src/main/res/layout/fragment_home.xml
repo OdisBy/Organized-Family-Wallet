@@ -148,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 app:roundPercent="1"
-                app:srcCompat="@drawable/ic_received" />
+                app:srcCompat="@drawable/ic_arrow_down" />
 
             <TextView
                 android:id="@+id/income_text_view"

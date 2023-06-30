@@ -58,6 +58,9 @@ internal class GroupRepositoryImpl @Inject constructor(
     }
 
     override suspend fun checkIfPendingUsers(): List<GroupUserDomain?> {
+        if(mainGroup == null){
+            getMainGroup()
+        }
         return mainGroup?.pendingUsers ?: listOf()
     }
 
@@ -66,6 +69,9 @@ internal class GroupRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getGroupInviteCode(): String {
+        if(mainGroup == null){
+            getMainGroup()
+        }
         return mainGroup!!.groupInvite!!
     }
 
@@ -144,20 +150,19 @@ internal class GroupRepositoryImpl @Inject constructor(
     }
 
     override suspend fun askEnterGroup(inviteCode: String) {
-        val actualGroupId = sessionManager.getGroupId()!!
-        val actualGroup = getGroupDomainById(actualGroupId)
         val newGroup = getGroupDomain(inviteCode)
         val userId = sessionManager.getUserId()
-        val userGroupDomain = actualGroup.users.firstOrNull { it.id == userId}
+        val userGroupDomain = mainGroup!!.users.firstOrNull { it.id == userId}
 
         val groupMutableUsers = newGroup.pendingUsers.toMutableList()
-        groupMutableUsers.firstOrNull { it?.id == userId } ?: return
-
+        val userWithId = groupMutableUsers.firstOrNull { it?.id == userId }
+        if (userWithId != null) {
+            return
+        }
         groupMutableUsers.add(userGroupDomain)
 
-        val groupRef = firebaseFirestore.collection("groups").document(actualGroupId)
-
-        firebaseFirestore.runBatch { batch ->
+        val groupRef = firebaseFirestore.collection("groups").document(newGroup.id!!)
+        firebaseFirestore.runBatch {
             groupRef.update("pendingUsers", groupMutableUsers)
         }
     }
@@ -193,41 +198,9 @@ internal class GroupRepositoryImpl @Inject constructor(
     private suspend fun firebaseToUserDomain(userId: String) : UserDomain? {
         return getFirebaseUser(userId)!!.toObject(UserDomain::class.java)
     }
-
-    private suspend fun getFirebaseGroup(groupId: String) : DocumentSnapshot?{
-        return try {
-            firebaseFirestore.collection("groups")
-                .document(groupId)
-                .get()
-                .await()
-        } catch (e: Exception) {
-            Log.w(TAG, "Error on try to get group with id $groupId, error: ${e.message}")
-            return null
-        }
-    }
-    private suspend fun firebaseToGroupDomain(groupId: String) : GroupDomain? {
-        val docFirebase = getFirebaseGroup(groupId)
-        return docFirebase?.toObject(GroupDomain::class.java)
-    }
-
     private fun getUserId(): String {
         return sessionManager.getUserId()
     }
-
-
-
-//    private suspend fun getGroupUserDomain(groupId: String) : DocumentSnapshot?{
-//        return try {
-//            firebaseFirestore.collection("groups")
-//                .document(groupId)
-//                .get()
-//                .await()
-//        } catch (e: Exception) {
-//            Log.w(UsersRepositoryImpl.TAG, "Error on try to get user with id $userId, error: ${e.message}")
-//            return null
-//        }
-//    }
-
     companion object{
         const val TAG = "GroupRepository"
     }

@@ -97,17 +97,38 @@
             android:textColor="@color/white"
             />
 
+        <Button
+            android:id="@+id/pendingUsersButton"
+            style="@style/Widget.Organized.Button.ElevatedButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pending_users_text"
+            android:layout_marginTop="40dp"
+            android:textSize="16sp"
+            android:autoSizeMinTextSize="16sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="2sp"
+            app:icon="@drawable/ic_pending"
+            app:iconSize="26dp"
+            app:iconTint="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tip_text_invite_code"
+            android:visibility="gone"
+            />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/usersRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="140dp"
             app:layout_constrainedHeight="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tip_text_invite_code" />
+            app:layout_constraintTop_toBottomOf="@id/pendingUsersButton"
+             />
 
         <include
             android:id="@+id/progress_bar"
