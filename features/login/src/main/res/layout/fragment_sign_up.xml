@@ -65,7 +65,6 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/description_your_email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:textColor="@color/white" />
@@ -94,7 +93,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="@string/description_your_password"
                 android:maxLines="1"
                 android:textColor="@color/white" />
 
@@ -121,7 +119,6 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_confirm_password"
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:textColor="@color/white" />
@@ -143,6 +140,10 @@
             app:iconPadding="5dp"
             app:iconTint="@color/black"
             android:layout_marginTop="30dp"
+            android:textSize="16sp"
+            android:autoSizeMinTextSize="16sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="4sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -188,6 +189,10 @@
             app:iconPadding="10dp"
             app:iconTint="#00100D0D"
             app:iconTintMode="src_atop"
+            android:textSize="16sp"
+            android:autoSizeMinTextSize="16sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="4sp"
             app:layout_constraintBottom_toTopOf="@+id/phone_sign_in"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -208,6 +213,10 @@
             app:icon="@drawable/ic_phone"
             app:iconPadding="4dp"
             app:iconTint="@color/black"
+            android:textSize="16sp"
+            android:autoSizeMinTextSize="16sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="4sp"
             app:layout_constraintBottom_toTopOf="@+id/anonymous_sign_in"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -229,6 +238,10 @@
             app:iconPadding="2dp"
             app:iconSize="26dp"
             app:iconTint="@color/black"
+            android:textSize="16sp"
+            android:autoSizeMinTextSize="16sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="4sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"

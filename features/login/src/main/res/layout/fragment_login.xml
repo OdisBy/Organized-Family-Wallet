@@ -48,7 +48,6 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:hint="@string/description_your_email"
                 android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -75,7 +74,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="@string/description_your_password"
                 android:maxLines="1"
                 android:textColor="@color/white" />
 
@@ -107,6 +105,10 @@
             app:layout_constraintWidth_percent="0.8"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
+            android:textSize="16sp"
+            android:autoSizeMinTextSize="16sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="4sp"
             android:layout_weight="1"
             android:text="@string/sign_in_email"
             android:textColor="@color/black"
@@ -203,6 +205,10 @@
             app:iconPadding="10dp"
             app:iconTint="#00100D0D"
             app:iconTintMode="src_atop"
+            android:textSize="16sp"
+            android:autoSizeMinTextSize="16sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="4sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/methods_text"/>
@@ -221,6 +227,10 @@
             app:icon="@drawable/ic_phone"
             app:iconPadding="5dp"
             app:iconTint="@color/black"
+            android:textSize="16sp"
+            android:autoSizeMinTextSize="16sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="4sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/google_sign_in"
@@ -241,6 +251,10 @@
             app:iconPadding="2dp"
             app:iconSize="26dp"
             app:iconTint="@color/black"
+            android:textSize="16sp"
+            android:autoSizeMinTextSize="16sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="4sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/phone_sign_in"
