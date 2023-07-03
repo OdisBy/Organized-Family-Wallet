@@ -1,7 +1,6 @@
 package com.ruliam.organizedfw.core.data.repository
 
 import android.util.Log
-import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ruliam.organizedfw.core.data.model.GroupDomain
@@ -154,22 +153,40 @@ internal class GroupRepositoryImpl @Inject constructor(
             usersNewGroup.add(user)
             userDomain.groupId = newGroup.id!!
 
-            val userDomainMap : Map<String, String> = mapOf("groupId" to groupId)
-            val oldGroupMap: Map<String, List<GroupUserDomain>> = mapOf("users" to usersOldGroup)
-            val newGroupMap: Map<String, List<GroupUserDomain>> = mapOf("users" to usersNewGroup)
+            val newPendingMutableList = newGroup.pendingUsers.toMutableList()
+
+            newPendingMutableList.remove(user)
+
+            val userDomainMap : Map<String, Any?> = mapOf("groupId" to groupId, "pendingGroupId" to null)
+
+            val newGroupMap: Map<String, Any> = mapOf("users" to usersNewGroup, "pendingUsers" to newPendingMutableList)
 
             val oldGroupRef = firebaseFirestore.collection("groups").document(oldGroup.id!!)
             val newGroupRef = firebaseFirestore.collection("groups").document(newGroup.id!!)
             val userRef = firebaseFirestore.collection("users").document(user.id)
-            firebaseFirestore.runBatch {
-                userRef.update(userDomainMap)
-                oldGroupRef.update(oldGroupMap)
-                newGroupRef.update(newGroupMap)
+
+
+            if(usersOldGroup.isEmpty()) {
+                firebaseFirestore.runBatch {
+                    userRef.update(userDomainMap)
+                    oldGroupRef.delete()
+                    newGroupRef.update(newGroupMap)
+                }
+            } else {
+                val oldGroupMap: Map<String, List<GroupUserDomain>> = mapOf("users" to usersOldGroup)
+
+                firebaseFirestore.runBatch {
+                    userRef.update(userDomainMap)
+                    oldGroupRef.update(oldGroupMap)
+                    newGroupRef.update(newGroupMap)
+                }
             }
+
+            getMainGroup()
         } catch (e: Exception){
             e.stackTrace
             Log.w(TAG, "Error on add pending user to group, e = ${e.message}")
-            throw FirebaseException("Add pending user to group")
+            throw e
         }
     }
 
@@ -180,20 +197,26 @@ internal class GroupRepositoryImpl @Inject constructor(
     }
 
     override suspend fun askEnterGroup(inviteCode: String) {
-        val newGroup = getGroupDomain(inviteCode)
         val userId = sessionManager.getUserId()
+
+        val user = getUserDomain(userId)
+
         val userGroupDomain = mainGroup!!.users.firstOrNull { it.id == userId}
 
+        val newGroup = getGroupDomain(inviteCode)
         val groupMutableUsers = newGroup.pendingUsers.toMutableList()
         val userWithId = groupMutableUsers.firstOrNull { it?.id == userId }
         if (userWithId != null) {
             return
         }
         groupMutableUsers.add(userGroupDomain)
-
+        user.pendingGroupId = newGroup.id
+        val pendingGroupIdMap = mapOf("pendingGroupId" to newGroup.id)
+        val userRef = firebaseFirestore.collection("users").document(userId)
         val groupRef = firebaseFirestore.collection("groups").document(newGroup.id!!)
         firebaseFirestore.runBatch {
             groupRef.update("pendingUsers", groupMutableUsers)
+            userRef.update(pendingGroupIdMap)
         }
     }
 

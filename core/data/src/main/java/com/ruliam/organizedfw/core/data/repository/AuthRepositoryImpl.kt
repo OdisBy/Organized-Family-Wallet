@@ -88,7 +88,8 @@ internal class AuthRepositoryImpl @Inject constructor(
                 email = null,
                 phoneNumber = null,
                 groupId = "",
-                profileUri = avatarUri
+                profileUri = avatarUri,
+                pendingGroupId = null
             )
 
             val groupUserDomain = GroupUserDomain(

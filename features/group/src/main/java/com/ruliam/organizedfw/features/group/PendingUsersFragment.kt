@@ -13,7 +13,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.ruliam.organizedfw.core.data.model.GroupUserDomain
+import com.ruliam.organizedfw.core.data.util.UiStateFlow
 import com.ruliam.organizedfw.features.group.databinding.FragmentPendingUsersBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -50,11 +52,32 @@ class PendingUsersFragment : Fragment() {
         binding.pendingUsersRecyclerView.adapter = pendingUsersAdapter
         viewModel.getUiState()
 
-        val pendingUsers = viewModel.uiState.value.data!!.pendingUsers
-        bindPendingUsers(pendingUsers)
-
         binding.backButton.setOnClickListener {
             navController.popBackStack()
+        }
+
+        lifecycleScope.launch {
+            viewModel.uiState
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { uiState ->
+                    when(uiState){
+                        is UiStateFlow.Error -> {
+                            Snackbar.make(
+                                binding.root,
+                                uiState.message,
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                        }
+                        is UiStateFlow.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                        }
+                        is UiStateFlow.Success -> {
+                            binding.progressBar.visibility = View.INVISIBLE
+                            bindPendingUsers(uiState.data!!.pendingUsers)
+                        }
+                        else -> Unit
+                    }
+                }
         }
 
 
@@ -84,6 +107,8 @@ class PendingUsersFragment : Fragment() {
             .setMessage("Você permite que ${user.username} entre em seu grupo?")
             .setPositiveButton("Permitir") { dialog, which ->
                 viewModel.addPendingUser(user)
+                val pendingUsers = viewModel.uiState.value.data!!.pendingUsers
+                bindPendingUsers(pendingUsers)
             }
             .setNegativeButton("Negar") { dialog, which ->
 

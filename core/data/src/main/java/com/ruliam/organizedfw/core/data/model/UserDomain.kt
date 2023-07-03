@@ -7,7 +7,8 @@ data class UserDomain(
     var email: String? = "",
     var phoneNumber: String? = "",
     var groupId: String = "",
-    var profileUri: String? = null
+    var profileUri: String? = null,
+    var pendingGroupId: String? = null
 ) {
-    constructor() : this("", "", 0.0, "", "", "", null)
+    constructor() : this("", "", 0.0, "", "", "", null, null)
 }

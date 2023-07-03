@@ -90,6 +90,7 @@ class GroupPageViewModel @Inject constructor(
 
     fun addPendingUser(user: GroupUserDomain) = viewModelScope.launch {
         groupRepository.addPendingUserToGroup(user)
+        getUiState()
     }
 
 
