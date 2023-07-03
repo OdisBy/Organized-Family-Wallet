@@ -59,12 +59,9 @@ interface GroupRepository {
     suspend fun getGroupDomainById(groupId: String): GroupDomain
 
     /**
-     * Just removes am user of a group
-     *
-     * Don't forget to add the user to a new group right after it
+     * Add a pending user to a new group
      */
-    suspend fun removeUserOfGroup(userId: String)
-
+    suspend fun addPendingUserToGroup(user: GroupUserDomain)
     /**
      * Check if user with user has group
      */

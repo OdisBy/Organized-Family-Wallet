@@ -88,6 +88,10 @@ class GroupPageViewModel @Inject constructor(
         _dialogState.value = DialogModel.Empty
     }
 
+    fun addPendingUser(user: GroupUserDomain) = viewModelScope.launch {
+        groupRepository.addPendingUserToGroup(user)
+    }
+
 
     data class UiState(
         val groupInviteCode: String,

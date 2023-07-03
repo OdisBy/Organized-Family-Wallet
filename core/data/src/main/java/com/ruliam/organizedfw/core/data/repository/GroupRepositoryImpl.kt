@@ -1,6 +1,7 @@
 package com.ruliam.organizedfw.core.data.repository
 
 import android.util.Log
+import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ruliam.organizedfw.core.data.model.GroupDomain
@@ -139,8 +140,37 @@ internal class GroupRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun removeUserOfGroup(userId: String) {
-        TODO("Not yet implemented")
+    override suspend fun addPendingUserToGroup(user: GroupUserDomain) {
+        try{
+            val groupId = sessionManager.getGroupId()!!
+            val userDomain = getUserDomain(user.id)
+            val oldGroup = getGroupDomainById(userDomain.groupId)
+            val newGroup = getGroupDomainById(groupId)
+
+            val usersOldGroup = oldGroup.users.toMutableList()
+            val usersNewGroup = newGroup.users.toMutableList()
+
+            usersOldGroup.remove(user)
+            usersNewGroup.add(user)
+            userDomain.groupId = newGroup.id!!
+
+            val userDomainMap : Map<String, String> = mapOf("groupId" to groupId)
+            val oldGroupMap: Map<String, List<GroupUserDomain>> = mapOf("users" to usersOldGroup)
+            val newGroupMap: Map<String, List<GroupUserDomain>> = mapOf("users" to usersNewGroup)
+
+            val oldGroupRef = firebaseFirestore.collection("groups").document(oldGroup.id!!)
+            val newGroupRef = firebaseFirestore.collection("groups").document(newGroup.id!!)
+            val userRef = firebaseFirestore.collection("users").document(user.id)
+            firebaseFirestore.runBatch {
+                userRef.update(userDomainMap)
+                oldGroupRef.update(oldGroupMap)
+                newGroupRef.update(newGroupMap)
+            }
+        } catch (e: Exception){
+            e.stackTrace
+            Log.w(TAG, "Error on add pending user to group, e = ${e.message}")
+            throw FirebaseException("Add pending user to group")
+        }
     }
 
     override suspend fun hasGroup(): Boolean {
@@ -166,7 +196,6 @@ internal class GroupRepositoryImpl @Inject constructor(
             groupRef.update("pendingUsers", groupMutableUsers)
         }
     }
-
 
     private fun generateInviteCode(): String {
         val characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -201,6 +230,29 @@ internal class GroupRepositoryImpl @Inject constructor(
     private fun getUserId(): String {
         return sessionManager.getUserId()
     }
+    private suspend fun getUserDomain(userId: String) : UserDomain {
+        try {
+            val userRef = firebaseFirestore.collection("users")
+
+            val userSnapshot = userRef.whereEqualTo("id", userId)
+                .limit(1)
+                .get()
+                .await()
+
+            if(!userSnapshot.isEmpty){
+                return userSnapshot.documents
+                    .firstOrNull()!!
+                    .toObject(UserDomain::class.java)!!
+            } else {
+                throw DoesNotExist("User does not exist")
+            }
+
+        } catch (e: Exception) {
+            Log.w(TAG, "Error on add user to group, error: ${e.message}")
+            throw e
+        }
+    }
+
     companion object{
         const val TAG = "GroupRepository"
     }

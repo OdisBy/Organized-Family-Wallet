@@ -80,9 +80,16 @@ class PendingUsersFragment : Fragment() {
 
     private fun openBindUser(user: GroupUserDomain) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Apertou no usuário em pending")
-            .setMessage("Nome ${user.username}")
-            .setPositiveButton("Confirmar") { dialog, which ->
+            .setTitle("${user.username} deseja se juntar a vocês!")
+            .setMessage("Você permite que ${user.username} entre em seu grupo?")
+            .setPositiveButton("Permitir") { dialog, which ->
+                viewModel.addPendingUser(user)
+            }
+            .setNegativeButton("Negar") { dialog, which ->
+
+            }
+            .setNeutralButton("Depois") { dialog, which ->
+
             }
             .show()
     }
