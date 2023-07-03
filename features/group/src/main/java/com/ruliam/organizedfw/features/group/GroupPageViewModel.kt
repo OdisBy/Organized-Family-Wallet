@@ -26,7 +26,10 @@ class GroupPageViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiStateFlow<UiState>>(UiStateFlow.Empty())
     val uiState: StateFlow<UiStateFlow<UiState>> = _uiState
 
-    var shouldOpenDialog: Boolean = false
+    private val _dialogState = MutableStateFlow<DialogModel>(DialogModel.Empty)
+    val dialogState: StateFlow<DialogModel> = _dialogState
+
+//    var shouldOpenDialog: Boolean = false
 
     fun isLogged() = viewModelScope.launch {
         _signInState.value = authRepository.checkLogin()
@@ -44,7 +47,8 @@ class GroupPageViewModel @Inject constructor(
                     Log.d(TAG, "User tried to enter in the same group with a invite code")
                 } else {
                     Log.d(TAG, "User trying to enter in a new group")
-                    shouldOpenDialog = true
+                    _dialogState.value = DialogModel.NewGroup
+//                    shouldOpenDialog = true
                 }
             }
         }
@@ -76,12 +80,26 @@ class GroupPageViewModel @Inject constructor(
         }
     }
 
+    fun onUserClick(user: GroupUserDomain) {
+        _dialogState.value = DialogModel.BindUser(user)
+    }
+
+    fun emptyDialog() {
+        _dialogState.value = DialogModel.Empty
+    }
+
 
     data class UiState(
         val groupInviteCode: String,
         val usersList: List<GroupUserDomain>,
         val pendingUsers: List<GroupUserDomain?>
     )
+
+    sealed class DialogModel {
+        data class BindUser(val user: GroupUserDomain) : DialogModel()
+        object NewGroup : DialogModel()
+        object Empty : DialogModel()
+    }
 
     companion object {
         const val TAG = "GroupPageViewModel"

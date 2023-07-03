@@ -6,12 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ruliam.organizedfw.core.data.model.GroupUserDomain
 import com.ruliam.organizedfw.features.group.databinding.FragmentPendingUsersBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PendingUsersFragment : Fragment() {
@@ -27,7 +32,7 @@ class PendingUsersFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         navController = findNavController()
-        pendingUsersAdapter = UsersListAdapter()
+        pendingUsersAdapter = UsersListAdapter(viewModel)
     }
 
     override fun onCreateView(
@@ -43,15 +48,43 @@ class PendingUsersFragment : Fragment() {
 
         binding.pendingUsersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.pendingUsersRecyclerView.adapter = pendingUsersAdapter
-
         viewModel.getUiState()
 
         val pendingUsers = viewModel.uiState.value.data!!.pendingUsers
         bindPendingUsers(pendingUsers)
-    }
 
+        binding.backButton.setOnClickListener {
+            navController.popBackStack()
+        }
+
+
+        lifecycleScope.launch {
+            viewModel.dialogState
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { dialog ->
+                    when(dialog){
+                        is GroupPageViewModel.DialogModel.BindUser -> {
+                            openBindUser(dialog.user)
+                            viewModel.emptyDialog()
+                        }
+
+                        else -> Unit
+                    }
+                }
+        }
+    }
     private fun bindPendingUsers(pendingUsers: List<GroupUserDomain?>) {
         pendingUsersAdapter.updateUsers(pendingUsers)
+    }
+
+
+    private fun openBindUser(user: GroupUserDomain) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Apertou no usuário em pending")
+            .setMessage("Nome ${user.username}")
+            .setPositiveButton("Confirmar") { dialog, which ->
+            }
+            .show()
     }
 
     companion object {

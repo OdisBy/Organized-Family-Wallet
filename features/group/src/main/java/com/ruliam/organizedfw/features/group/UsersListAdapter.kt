@@ -3,6 +3,7 @@ package com.ruliam.organizedfw.features.group
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -17,7 +18,7 @@ import com.ruliam.organizedfw.features.group.databinding.UsersCardViewBinding
 /**
  * RecyclerView adapter for displaying a list of users.
  */
-class UsersListAdapter : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
+class UsersListAdapter(private val viewModel: GroupPageViewModel) : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
 
     private val asyncListDiffer: AsyncListDiffer<GroupUserDomain> = AsyncListDiffer(this, DiffCallback)
 
@@ -25,7 +26,7 @@ class UsersListAdapter : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = UsersCardViewBinding.inflate(layoutInflater, parent, false)
-        return ViewHolder(binding, parent.context)
+        return ViewHolder(binding, parent.context, viewModel)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -38,10 +39,10 @@ class UsersListAdapter : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
         asyncListDiffer.submitList(users)
     }
 
-
     class ViewHolder(
         private val binding: UsersCardViewBinding,
-        private val context: Context
+        private val context: Context,
+        private val viewModel: GroupPageViewModel
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: GroupUserDomain) {
             // Set profile image
@@ -58,6 +59,11 @@ class UsersListAdapter : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
                 })
 
             binding.username.text = item.username
+
+            binding.root.setOnClickListener {
+                Log.d(TAG, "Click binding adapter userId ${item.id}")
+                viewModel.onUserClick(item)
+            }
         }
     }
 
@@ -68,5 +74,9 @@ class UsersListAdapter : RecyclerView.Adapter<UsersListAdapter.ViewHolder>() {
         override fun areContentsTheSame(oldItem: GroupUserDomain, newItem: GroupUserDomain): Boolean {
             return oldItem == newItem
         }
+    }
+
+    companion object {
+        const val TAG = "UsersListAdapter"
     }
 }

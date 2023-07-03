@@ -61,7 +61,7 @@ class GroupPageFragment : Fragment() {
                 }
             }
 
-        usersAdapter = UsersListAdapter()
+        usersAdapter = UsersListAdapter(viewModel)
     }
 
     override fun onCreateView(
@@ -113,11 +113,26 @@ class GroupPageFragment : Fragment() {
                             bindUsers(uiState.data!!.usersList)
                             bindInviteCode(uiState.data!!.groupInviteCode)
                             bindPendingUsers(uiState.data!!.pendingUsers)
-
-                            if(viewModel.shouldOpenDialog){
-                                confirmNewGroup()
-                            }
                         }
+                        else -> Unit
+                    }
+                }
+        }
+
+        lifecycleScope.launch {
+            viewModel.dialogState
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { dialog ->
+                    when(dialog){
+                        is GroupPageViewModel.DialogModel.NewGroup -> {
+                            confirmNewGroup()
+                            viewModel.emptyDialog()
+                        }
+                        is GroupPageViewModel.DialogModel.BindUser -> {
+                            openBindUser(dialog.user)
+                            viewModel.emptyDialog()
+                        }
+
                         else -> Unit
                     }
                 }
@@ -148,7 +163,6 @@ class GroupPageFragment : Fragment() {
     }
 
     private fun confirmNewGroup() {
-        viewModel.shouldOpenDialog = false
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(resources.getString(com.ruliam.organizedfw.features.group.R.string.enter_new_group_title))
             .setMessage(resources.getString(com.ruliam.organizedfw.features.group.R.string.enter_new_group_msg))
@@ -157,17 +171,27 @@ class GroupPageFragment : Fragment() {
             }
             .setPositiveButton("Confirmar") { dialog, which ->
                 viewModel.askForEnterGroup()
-                confirmMessageDialog()
+                confirmNewGroupMessageDialog()
             }
             .show()
 
     }
 
-    private fun confirmMessageDialog() {
+    private fun confirmNewGroupMessageDialog() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(resources.getString(com.ruliam.organizedfw.features.group.R.string.enter_new_group_title_confirm))
             .setMessage(resources.getString(com.ruliam.organizedfw.features.group.R.string.enter_new_group_msg_confirm))
             .setPositiveButton("OK") { dialog, which ->
+            }
+            .show()
+    }
+
+
+    private fun openBindUser(user: GroupUserDomain) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Apertou no usuário")
+            .setMessage("Nome ${user.username}")
+            .setPositiveButton("Confirmar") { dialog, which ->
             }
             .show()
     }
