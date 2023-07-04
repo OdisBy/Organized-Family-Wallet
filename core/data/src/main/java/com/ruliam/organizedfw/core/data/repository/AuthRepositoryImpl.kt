@@ -74,7 +74,6 @@ internal class AuthRepositoryImpl @Inject constructor(
     ): UserDomain {
         try{
             val groupDomain: GroupDomain
-            val groupRef: DocumentReference
             val userId = firebaseAuth.currentUser!!.uid
             val userRef = firebaseFirestore.collection("users")
                 .document(userId)
@@ -100,45 +99,34 @@ internal class AuthRepositoryImpl @Inject constructor(
                 lastTransaction = null
             )
 
-            try{
-                if(groupInvite.isNullOrEmpty()){
-                    groupDomain = groupRepository.createGroupDomain(groupUserDomain)
-                    groupRef = firebaseFirestore.collection("groups")
-                        .document()
-                    groupDomain.id = groupRef.id
-                } else{
-                    groupDomain = groupRepository.getGroupDomain(groupInvite)
-                    val newList = addUserToList(groupDomain, groupUserDomain)
-                    groupDomain.users = newList
-                    groupRef = firebaseFirestore.collection("groups")
-                        .document(groupDomain.id!!)
-                }
-            } catch (e: Exception){
-                throw e
-            }
+            groupDomain = groupRepository.createGroupDomain(groupUserDomain)
 
+            val groupRef: DocumentReference = firebaseFirestore.collection("groups")
+                .document()
+
+            groupDomain.id = groupRef.id
             userDomain.groupId = groupRef.id
+            createLoginSession(userDomain.id, groupRef.id)
 
             firebaseFirestore.runBatch { batch ->
                 groupRef.set(groupDomain)
                 userRef.set(userDomain)
             }
 
-            createLoginSession(userDomain.id, groupRef.id)
+            // After create user ask to enter in the group
+            if(!groupInvite.isNullOrEmpty()){
+                groupRepository.askEnterGroup(groupInvite)
+            }
             return userDomain
         } catch (e: Exception){
+            e.stackTrace
+            Log.w(TAG, "Error on create user and group: ${e.message.toString()}")
             throw e
         }
     }
 
     override fun createLoginSession(userId: String, groupId: String) {
         sessionManager.createLoginSession(userId, groupId)
-    }
-
-    private fun addUserToList(groupDomain: GroupDomain, groupUserDomain: GroupUserDomain): List<GroupUserDomain> {
-        val mutable = groupDomain.users.toMutableList()
-        mutable.add(groupUserDomain)
-        return mutable
     }
 
     private suspend fun addAvatar(userId: String, avatar: Bitmap): Uri {

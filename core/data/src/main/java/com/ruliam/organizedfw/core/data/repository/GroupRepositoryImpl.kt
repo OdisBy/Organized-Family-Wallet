@@ -221,6 +221,10 @@ internal class GroupRepositoryImpl @Inject constructor(
     }
 
     override suspend fun askEnterGroup(inviteCode: String) {
+        if(mainGroup == null){
+            getMainGroup()
+        }
+
         val userId = sessionManager.getUserId()
 
         val user = getUserDomain(userId)
