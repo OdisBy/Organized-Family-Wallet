@@ -190,6 +190,30 @@ internal class GroupRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun deniedPendingUser(user: GroupUserDomain) {
+        try{
+            val actualGroup = mainGroup!!
+            val newPendingMutableList = actualGroup.pendingUsers.toMutableList()
+            newPendingMutableList.remove(user)
+
+            val userDomainMap : Map<String, Any?> = mapOf("pendingGroupId" to null)
+            val newGroupMap: Map<String, Any> = mapOf("pendingUsers" to newPendingMutableList)
+
+            val groupRef = firebaseFirestore.collection("groups").document(actualGroup.id!!)
+            val userRef = firebaseFirestore.collection("users").document(user.id)
+            firebaseFirestore.runBatch {
+                userRef.update(userDomainMap)
+                groupRef.update(newGroupMap)
+            }
+
+            getMainGroup()
+        } catch (e: Exception){
+            e.stackTrace
+            Log.w(TAG, "Error on add pending user to group, e = ${e.message}")
+            throw e
+        }
+    }
+
     override suspend fun hasGroup(): Boolean {
         val userId = sessionManager.getUserId()
         val mainUser = firebaseToUserDomain(userId)

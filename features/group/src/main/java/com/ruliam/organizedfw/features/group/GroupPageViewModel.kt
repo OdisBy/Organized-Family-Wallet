@@ -93,6 +93,11 @@ class GroupPageViewModel @Inject constructor(
         getUiState()
     }
 
+    fun deniedPendingUser(user: GroupUserDomain) = viewModelScope.launch {
+        groupRepository.deniedPendingUser(user)
+        getUiState()
+    }
+
 
     data class UiState(
         val groupInviteCode: String,

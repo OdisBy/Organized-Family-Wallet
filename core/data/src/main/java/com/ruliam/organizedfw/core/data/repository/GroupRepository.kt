@@ -62,6 +62,11 @@ interface GroupRepository {
      * Add a pending user to a new group
      */
     suspend fun addPendingUserToGroup(user: GroupUserDomain)
+
+    /**
+     * Denied an request to enter in a group
+     */
+    suspend fun deniedPendingUser(user: GroupUserDomain)
     /**
      * Check if user with user has group
      */

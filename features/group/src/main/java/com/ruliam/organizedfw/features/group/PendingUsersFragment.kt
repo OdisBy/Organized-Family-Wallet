@@ -111,7 +111,7 @@ class PendingUsersFragment : Fragment() {
                 bindPendingUsers(pendingUsers)
             }
             .setNegativeButton("Negar") { dialog, which ->
-
+                viewModel.deniedPendingUser(user)
             }
             .setNeutralButton("Depois") { dialog, which ->
 
