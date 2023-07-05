@@ -17,7 +17,7 @@ interface AvatarRepository {
      */
     suspend fun generateAvatar(username: String): Bitmap
     /**
-     * Get the user avatar using it url of firestore storage
+     * Get the user avatar using it url of firestore storage or cache if its already requested
      */
-    suspend fun getAvatarByUrl(url: String): Bitmap?
+    suspend fun getAvatarByUrl(userId: String, url: String): Bitmap?
 }

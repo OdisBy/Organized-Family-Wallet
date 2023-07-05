@@ -2,23 +2,24 @@ package com.ruliam.organizedfw.features.home
 
 import android.graphics.Bitmap
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ruliam.organizedfw.core.data.repository.AuthRepository
 import com.ruliam.organizedfw.core.data.repository.AvatarRepository
+import com.ruliam.organizedfw.core.data.repository.UsersRepository
+import com.ruliam.organizedfw.core.data.util.AmountUtils
+import com.ruliam.organizedfw.core.data.util.UiStateFlow
 import com.ruliam.organizedfw.features.home.domain.GetBalanceUseCase
 import com.ruliam.organizedfw.features.home.domain.GetFinancesOfMonthUseCase
-import com.ruliam.organizedfw.features.home.model.ListItemType
-import com.ruliam.organizedfw.core.data.repository.UsersRepository
-import com.ruliam.organizedfw.core.data.util.UiStateFlow
 import com.ruliam.organizedfw.features.home.model.BalanceCardItem
+import com.ruliam.organizedfw.features.home.model.ListItemType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import com.ruliam.organizedfw.core.data.util.AmountUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.TextStyle
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel

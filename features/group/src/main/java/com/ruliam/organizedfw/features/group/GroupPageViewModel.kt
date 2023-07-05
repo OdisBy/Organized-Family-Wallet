@@ -35,13 +35,11 @@ class GroupPageViewModel @Inject constructor(
     fun isLogged() = viewModelScope.launch {
         _signInState.value = authRepository.checkLogin()
     }
-
     fun checkNewInviteCode() = viewModelScope.launch {
         val inviteCode = state.get<String>("groupInviteCode")
         Log.d(TAG, "check new invite code $inviteCode")
         if (inviteCode != null) {
             if (inviteCode.isNotEmpty()) {
-
                 val groupInviteCode = groupRepository.getGroupInviteCode()
 
                 if (inviteCode == groupInviteCode) {
@@ -49,7 +47,6 @@ class GroupPageViewModel @Inject constructor(
                 } else {
                     Log.d(TAG, "User trying to enter in a new group")
                     _dialogState.value = DialogModel.NewGroup
-//                    shouldOpenDialog = true
                 }
             }
         }

@@ -12,21 +12,6 @@ internal class UsersRepositoryImpl @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
     private val sessionManager: SessionManager
     ) : UsersRepository {
-    private suspend fun getFirebaseUser(userId: String) : DocumentSnapshot?{
-        return try {
-            firebaseFirestore.collection("users")
-                .document(userId)
-                .get()
-                .await()
-        } catch (e: Exception) {
-            Log.w(TAG, "Error on try to get user with id $userId, error: ${e.message}")
-            return null
-        }
-    }
-    private suspend fun firebaseToUserDomain(userId: String) : UserDomain? {
-        return getFirebaseUser(userId)!!.toObject(UserDomain::class.java)
-    }
-
     override suspend fun getMainUser(): UserDomain? {
         val userId = sessionManager.getUserId()
         return firebaseToUserDomain(userId)
@@ -71,6 +56,20 @@ internal class UsersRepositoryImpl @Inject constructor(
         } catch (e: Exception){
             Log.w(TAG, "Error on try to update user balance with id $userId, error: ${e.message}")
         }
+    }
+    private suspend fun getFirebaseUser(userId: String) : DocumentSnapshot?{
+        return try {
+            firebaseFirestore.collection("users")
+                .document(userId)
+                .get()
+                .await()
+        } catch (e: Exception) {
+            Log.w(TAG, "Error on try to get user with id $userId, error: ${e.message}")
+            return null
+        }
+    }
+    private suspend fun firebaseToUserDomain(userId: String) : UserDomain? {
+        return getFirebaseUser(userId)!!.toObject(UserDomain::class.java)
     }
     companion object {
         const val TAG = "UsersRepository"

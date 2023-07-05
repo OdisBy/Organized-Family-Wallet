@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import com.bumptech.glide.Glide
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
 import com.ruliam.organizedfw.core.data.avatar.UserAvatar
@@ -17,13 +16,13 @@ import javax.inject.Inject
 
 
 internal class AvatarRepositoryImpl @Inject constructor(
-    private val firestore: FirebaseFirestore,
     private val firebaseStorage: FirebaseStorage,
     private val userAvatar: UserAvatar,
     @ApplicationContext private val context: Context
 ) : AvatarRepository {
     private val storage = firebaseStorage.reference
     private val ONE_MEGABYTE: Long = 1024 * 1024
+    private val avatarCache: MutableMap<String, Bitmap> = HashMap()
 
     override suspend fun addAvatarToFirestore(userId: String, bitmap: ByteArray): Uri {
         val avatarRef = storage.child("avatars/$userId")
@@ -35,8 +34,13 @@ internal class AvatarRepositoryImpl @Inject constructor(
             throw Exception(e)
         }
     }
-
     override suspend fun getAvatarById(userId: String): Bitmap? {
+        val cachedAvatar = avatarCache[userId]
+        if (cachedAvatar != null) {
+            Log.d(TAG, "Getting avatar from cache")
+            return cachedAvatar
+        }
+
         var attemptCount = 0
         val maxAttempts = 5
         val retryDelayMillis = 1000
@@ -46,7 +50,9 @@ internal class AvatarRepositoryImpl @Inject constructor(
                 val avatarRef = storage.child("avatars/$userId")
                 val data = avatarRef.getBytes(ONE_MEGABYTE).await()
 
-                return BitmapFactory.decodeByteArray(data, 0, data!!.size)
+                val avatarAsBitmap = BitmapFactory.decodeByteArray(data, 0, data!!.size)
+                avatarCache[userId] = avatarAsBitmap
+                return avatarAsBitmap
             } catch (e: Exception) {
                 if ((e is StorageException) && (e.errorCode == -13010)) {
                     Log.w(TAG, "Avatar not found. Retrying...")
@@ -58,22 +64,27 @@ internal class AvatarRepositoryImpl @Inject constructor(
                 }
             }
         }
-
         return null
     }
     override suspend fun generateAvatar(username: String): Bitmap {
         return userAvatar.generateUserAvatar(username)
     }
-
-    override suspend fun getAvatarByUrl(url: String): Bitmap? {
+    override suspend fun getAvatarByUrl(userId: String, url: String): Bitmap? {
+        val cachedAvatar = avatarCache[userId]
+        if (cachedAvatar != null) {
+            return cachedAvatar
+        }
         try {
-            return Glide.with(context)
+            val avatarBitmap = Glide.with(context)
                 .asBitmap()
-                .load("url")
+                .load(url)
                 .submit()
                 .get()
+
+            avatarCache[userId] = avatarBitmap
+            return avatarBitmap
         } catch (e: Exception) {
-            e.stackTrace
+            e.printStackTrace()
             throw Exception("Can't get avatar image")
         }
     }
