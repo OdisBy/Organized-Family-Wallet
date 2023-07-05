@@ -1,165 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    tools:context=".signup_screen.SignUpFragment">
-
-    <TextView
-        android:id="@+id/sign_up_text"
+    android:layout_height="wrap_content"
+    >
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Perfil"
-        android:textColor="@color/text_color"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@id/top_guideline" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/username_input"
-        style="@style/Theme.Organized.TextInputLayout.OutlineBox.White"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/horizontal_margin"
-        android:layout_marginEnd="@dimen/horizontal_margin"
-        android:layout_marginTop="40dp"
-        android:hint="Nome de usuário*"
-        app:endIconMode="clear_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sign_up_text"
-        app:layout_constraintBottom_toTopOf="@id/group_input"
-        app:startIconDrawable="@drawable/ic_email"
-        app:startIconTint="@color/white">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username_text_input"
+        android:fillViewport="true"
+        android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:textColor="@color/white" />
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            tools:context=".signup_screen.SignUpFragment">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/sign_up_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Perfil"
+                android:textColor="@color/text_color"
+                android:textSize="24sp"
+                app:layout_constraintTop_toBottomOf="@id/top_guideline" />
 
-    <androidx.constraintlayout.utils.widget.ImageFilterView
-        android:visibility="gone"
-        android:id="@+id/group_tooltip"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_gravity="center_horizontal"
-        app:layout_constraintEnd_toEndOf="@id/group_input"
-        app:layout_constraintBottom_toTopOf="@id/group_input"
-        android:clickable="true"
-        android:tooltipText="@string/invite_code_tooltip"
-        android:background="@color/white"
-        android:backgroundTint="@color/white"
-        android:src="@drawable/ic_question"
-        android:tint="@color/black"
-        android:padding="2dp"
-        app:roundPercent="1" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/username_input"
+                style="@style/Theme.Organized.TextInputLayout.OutlineBox.White"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_margin"
+                android:layout_marginEnd="@dimen/horizontal_margin"
+                android:layout_marginTop="40dp"
+                android:hint="Nome de usuário*"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sign_up_text"
+                app:layout_constraintBottom_toTopOf="@id/group_input"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/white">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:visibility="gone"
-        android:id="@+id/group_input"
-        style="@style/Theme.Organized.TextInputLayout.OutlineBox.White"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/horizontal_margin"
-        android:layout_marginEnd="@dimen/horizontal_margin"
-        android:layout_marginTop="40dp"
-        android:hint="Código de convite de grupo"
-        app:endIconMode="clear_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/avatar"
-        app:startIconDrawable="@drawable/ic_email"
-        app:startIconTint="@color/white">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/username_text_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:textColor="@color/white" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/group_text_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:textColor="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:visibility="gone"
+                android:id="@+id/group_tooltip"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_horizontal"
+                app:layout_constraintEnd_toEndOf="@id/group_input"
+                app:layout_constraintBottom_toTopOf="@id/group_input"
+                android:clickable="true"
+                android:tooltipText="@string/invite_code_tooltip"
+                android:background="@color/white"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/ic_question"
+                android:tint="@color/black"
+                android:padding="2dp"
+                app:roundPercent="1" />
 
-    <androidx.constraintlayout.utils.widget.ImageFilterView
-        android:visibility="gone"
-        android:id="@+id/avatar"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_margin="30dp"
-        android:layout_gravity="center_horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/group_input"
-        android:background="@color/black"
-        app:roundPercent="1" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:visibility="gone"
+                android:id="@+id/group_input"
+                style="@style/Theme.Organized.TextInputLayout.OutlineBox.White"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_margin"
+                android:layout_marginEnd="@dimen/horizontal_margin"
+                android:layout_marginTop="40dp"
+                android:hint="Código de convite de grupo"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/avatar"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/white">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/group_text_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:textColor="@color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:visibility="gone"
+                android:id="@+id/avatar"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_margin="30dp"
+                android:layout_gravity="center_horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/group_input"
+                android:background="@color/black"
+                app:roundPercent="1" />
 
 
-    <androidx.constraintlayout.utils.widget.ImageFilterView
-        android:visibility="gone"
-        android:id="@+id/camera_button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="25dp"
-        android:layout_gravity="center_horizontal"
-        app:layout_constraintEnd_toEndOf="@id/avatar"
-        app:layout_constraintBottom_toBottomOf="@id/avatar"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="@color/white"
-        android:backgroundTint="@color/camera_selector"
-        android:padding="10dp"
-        android:src="@drawable/ic_camera"
-        app:roundPercent="1" />
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:visibility="gone"
+                android:id="@+id/camera_button"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="25dp"
+                android:layout_gravity="center_horizontal"
+                app:layout_constraintEnd_toEndOf="@id/avatar"
+                app:layout_constraintBottom_toBottomOf="@id/avatar"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@color/white"
+                android:backgroundTint="@color/camera_selector"
+                android:padding="10dp"
+                android:src="@drawable/ic_camera"
+                app:roundPercent="1" />
 
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button"
-        style="@style/Theme.Organized.Button.Outline.Icon.White"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="@dimen/horizontal_margin"
-        android:layout_marginEnd="@dimen/horizontal_margin"
-        android:layout_weight="1"
-        android:text="Próximo"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:cornerRadius="10dp"
-        app:icon="@drawable/ic_arrow_right"
-        app:iconTint="@color/white"
-        app:iconPadding="10dp"
-        app:iconGravity="textEnd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/avatar" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button"
+                style="@style/Theme.Organized.Button.Outline.Icon.White"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="@dimen/horizontal_margin"
+                android:layout_marginEnd="@dimen/horizontal_margin"
+                android:layout_weight="1"
+                android:text="Próximo"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_arrow_right"
+                app:iconTint="@color/white"
+                app:iconPadding="10dp"
+                app:iconGravity="textEnd"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/avatar" />
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/top_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.1" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/bottom_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.98" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
     <include
         android:id="@+id/progress_bar"
         layout="@layout/progress_bar"
         android:visibility="invisible" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/top_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bottom_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.98" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

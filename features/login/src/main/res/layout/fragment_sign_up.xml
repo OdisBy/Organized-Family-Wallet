@@ -1,264 +1,269 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    >
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        tools:context=".signup_screen.SignUpFragment">
+        android:fillViewport="true"
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/backButton"
-            style="?attr/materialIconButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/back_button"
-            android:text="@null"
-            app:icon="@drawable/ic_arrow_back"
-            app:iconSize="26dp"
-            app:iconTint="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/sign_up_text"
-            android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.8"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/sign_up_text"
-            android:textColor="@color/text_color"
-            android:textSize="26sp"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="26sp"
-            android:autoSizeMaxTextSize="100sp"
-            android:autoSizeStepGranularity="2sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/backButton" />
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/email_input"
-            style="@style/Theme.Organized.TextInputLayout.OutlineBox.White"
-            android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.9"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/horizontal_margin"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="@dimen/horizontal_margin"
-            android:hint="@string/description_your_email"
-            app:endIconMode="clear_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sign_up_text"
-            app:startIconDrawable="@drawable/ic_email"
-            app:startIconTint="@color/white">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:textColor="@color/white" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password_input"
-            style="@style/Theme.Organized.TextInputLayout.OutlineBox.White"
-            android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.9"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/horizontal_margin"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="@dimen/horizontal_margin"
-            android:hint="@string/description_your_password"
-            app:endIconMode="password_toggle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/email_input"
-            app:startIconDrawable="@drawable/ic_password"
-            app:startIconTint="@color/white">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:textColor="@color/white" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/confirm_password_input"
-            style="@style/Theme.Organized.TextInputLayout.OutlineBox.White"
-            android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.9"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/horizontal_margin"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="@dimen/horizontal_margin"
-            android:hint="@string/confirm_password"
-            app:endIconMode="password_toggle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password_input"
-            app:startIconDrawable="@drawable/ic_password"
-            app:startIconTint="@color/white">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:textColor="@color/white" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/email_sign_in"
-            style="@style/Theme.Organized.Button.Login.White"
-            android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.8"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/sign_up_button"
-            android:textColor="@color/black"
-            app:cornerRadius="10dp"
-            app:icon="@drawable/ic_email"
-            app:iconPadding="5dp"
-            app:iconTint="@color/black"
-            android:layout_marginTop="30dp"
-            android:textSize="16sp"
-            android:autoSizeMinTextSize="16sp"
-            android:autoSizeMaxTextSize="100sp"
-            android:autoSizeStepGranularity="4sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/confirm_password_input" />
-
-        <View
-            android:id="@+id/line_view"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@id/methods_text"
-            app:layout_constraintTop_toTopOf="@id/methods_text" />
-
-        <TextView
-            android:id="@+id/methods_text"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:padding="8dp"
-            android:text="@string/other_register_way"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:layout_marginTop="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/email_sign_in" />
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            tools:context=".signup_screen.SignUpFragment">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/google_sign_in"
-            style="@style/Theme.Organized.Button.Login.White"
-            android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.8"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1"
-            android:text="@string/sign_up_google"
-            android:textColor="@color/black"
-            app:cornerRadius="10dp"
-            app:icon="@drawable/googleg_standard_color_18"
-            app:iconPadding="10dp"
-            app:iconTint="#00100D0D"
-            app:iconTintMode="src_atop"
-            android:textSize="16sp"
-            android:autoSizeMinTextSize="16sp"
-            android:autoSizeMaxTextSize="100sp"
-            android:autoSizeStepGranularity="4sp"
-            app:layout_constraintBottom_toTopOf="@+id/phone_sign_in"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/methods_text" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/backButton"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/back_button"
+                android:text="@null"
+                app:icon="@drawable/ic_arrow_back"
+                app:iconSize="26dp"
+                app:iconTint="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/phone_sign_in"
-            style="@style/Theme.Organized.Button.Login.White"
-            android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.8"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1"
-            android:text="@string/sign_up_number"
-            android:textColor="@color/black"
-            app:cornerRadius="10dp"
-            app:icon="@drawable/ic_phone"
-            app:iconPadding="4dp"
-            app:iconTint="@color/black"
-            android:textSize="16sp"
-            android:autoSizeMinTextSize="16sp"
-            android:autoSizeMaxTextSize="100sp"
-            android:autoSizeStepGranularity="4sp"
-            app:layout_constraintBottom_toTopOf="@+id/anonymous_sign_in"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/google_sign_in" />
+            <TextView
+                android:id="@+id/sign_up_text"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.8"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/sign_up_text"
+                android:textColor="@color/text_color"
+                android:textSize="26sp"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="26sp"
+                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeStepGranularity="2sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/backButton" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/anonymous_sign_in"
-            style="@style/Theme.Organized.Button.Login.White"
-            android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.8"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1"
-            android:text="@string/login_anonymous"
-            android:textColor="@color/black"
-            app:cornerRadius="10dp"
-            app:icon="@drawable/ic_person"
-            app:iconPadding="2dp"
-            app:iconSize="26dp"
-            app:iconTint="@color/black"
-            android:textSize="16sp"
-            android:autoSizeMinTextSize="16sp"
-            android:autoSizeMaxTextSize="100sp"
-            android:autoSizeStepGranularity="4sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phone_sign_in" />
 
-        <include
-            android:id="@+id/progress_bar"
-            android:visibility="invisible"
-            layout="@layout/progress_bar" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email_input"
+                style="@style/Theme.Organized.TextInputLayout.OutlineBox.White"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.9"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_margin"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="@dimen/horizontal_margin"
+                android:hint="@string/description_your_email"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sign_up_text"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/white">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_bottom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".97" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:textColor="@color/white" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-</ScrollView>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password_input"
+                style="@style/Theme.Organized.TextInputLayout.OutlineBox.White"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.9"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_margin"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="@dimen/horizontal_margin"
+                android:hint="@string/description_your_password"
+                app:endIconMode="password_toggle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/email_input"
+                app:startIconDrawable="@drawable/ic_password"
+                app:startIconTint="@color/white">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:textColor="@color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/confirm_password_input"
+                style="@style/Theme.Organized.TextInputLayout.OutlineBox.White"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.9"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/horizontal_margin"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="@dimen/horizontal_margin"
+                android:hint="@string/confirm_password"
+                app:endIconMode="password_toggle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/password_input"
+                app:startIconDrawable="@drawable/ic_password"
+                app:startIconTint="@color/white">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:textColor="@color/white" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/email_sign_in"
+                style="@style/Theme.Organized.Button.Login.White"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.8"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/sign_up_button"
+                android:textColor="@color/black"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_email"
+                app:iconPadding="5dp"
+                app:iconTint="@color/black"
+                android:layout_marginTop="30dp"
+                android:textSize="16sp"
+                android:autoSizeMinTextSize="16sp"
+                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeStepGranularity="4sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/confirm_password_input" />
+
+            <View
+                android:id="@+id/line_view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/methods_text"
+                app:layout_constraintTop_toTopOf="@id/methods_text" />
+
+            <TextView
+                android:id="@+id/methods_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:padding="8dp"
+                android:text="@string/other_register_way"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginTop="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/email_sign_in" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/google_sign_in"
+                style="@style/Theme.Organized.Button.Login.White"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.8"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:text="@string/sign_up_google"
+                android:textColor="@color/black"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/googleg_standard_color_18"
+                app:iconPadding="10dp"
+                app:iconTint="#00100D0D"
+                app:iconTintMode="src_atop"
+                android:textSize="16sp"
+                android:autoSizeMinTextSize="16sp"
+                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeStepGranularity="4sp"
+                app:layout_constraintBottom_toTopOf="@+id/phone_sign_in"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/methods_text" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/phone_sign_in"
+                style="@style/Theme.Organized.Button.Login.White"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.8"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:text="@string/sign_up_number"
+                android:textColor="@color/black"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_phone"
+                app:iconPadding="4dp"
+                app:iconTint="@color/black"
+                android:textSize="16sp"
+                android:autoSizeMinTextSize="16sp"
+                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeStepGranularity="4sp"
+                app:layout_constraintBottom_toTopOf="@+id/anonymous_sign_in"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/google_sign_in" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/anonymous_sign_in"
+                style="@style/Theme.Organized.Button.Login.White"
+                android:layout_width="0dp"
+                app:layout_constraintWidth_percent="0.8"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:text="@string/login_anonymous"
+                android:textColor="@color/black"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_person"
+                app:iconPadding="2dp"
+                app:iconSize="26dp"
+                app:iconTint="@color/black"
+                android:textSize="16sp"
+                android:autoSizeMinTextSize="16sp"
+                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeStepGranularity="4sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/phone_sign_in" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent=".97" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+    <include
+        android:id="@+id/progress_bar"
+        android:visibility="invisible"
+        layout="@layout/progress_bar" />
+</RelativeLayout>
