@@ -119,7 +119,6 @@ internal class AuthRepositoryImpl @Inject constructor(
             }
             return userDomain
         } catch (e: Exception){
-            e.stackTrace
             Log.w(TAG, "Error on create user and group: ${e.message.toString()}")
             throw e
         }

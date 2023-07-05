@@ -2,6 +2,6 @@ package com.ruliam.organizedfw.core.data.util
 
 class FinanceRepositoryException(message: String?, cause: Throwable?) : Exception(message, cause)
 
-class DoesNotExist(message: String?): Exception(message)
+object DoesNotExist: Exception("Does not exist")
 
 class CanNotAddFirebase(message: String?) : Exception(message)

@@ -1,6 +1,7 @@
 package com.ruliam.organizedfw.core.data.repository
 
 import android.util.Log
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ruliam.organizedfw.core.data.model.GroupDomain
@@ -9,6 +10,7 @@ import com.ruliam.organizedfw.core.data.model.UserDomain
 import com.ruliam.organizedfw.core.data.session.SessionManager
 import com.ruliam.organizedfw.core.data.util.CanNotAddFirebase
 import com.ruliam.organizedfw.core.data.util.DoesNotExist
+import com.ruliam.organizedfw.core.data.util.RequestPendingResult
 import kotlinx.coroutines.tasks.await
 import java.security.SecureRandom
 import javax.inject.Inject
@@ -109,11 +111,11 @@ internal class GroupRepositoryImpl @Inject constructor(
                     .firstOrNull()!!
                     .toObject(GroupDomain::class.java)!!
             } else {
-                throw DoesNotExist("Group does not exist")
+                throw DoesNotExist
             }
         } catch (e: Exception) {
-            Log.w(TAG, "Error on add user to group, error: ${e.message}")
-            throw CanNotAddFirebase("Group does not exist")
+            Log.w(TAG, "Error on getGroupDomain, error: ${e.message}")
+            throw e
         }
     }
 
@@ -131,7 +133,7 @@ internal class GroupRepositoryImpl @Inject constructor(
                     .firstOrNull()!!
                     .toObject(GroupDomain::class.java)!!
             } else {
-                throw DoesNotExist("Group does not exist")
+                throw DoesNotExist
             }
         } catch (e: Exception) {
             Log.w(TAG, "Error on add user to group, error: ${e.message}")
@@ -220,32 +222,70 @@ internal class GroupRepositoryImpl @Inject constructor(
         return !mainUser?.groupId.isNullOrEmpty()
     }
 
-    override suspend fun askEnterGroup(inviteCode: String) {
+    override suspend fun askEnterGroup(inviteCode: String, ignoreCurrentPending: Boolean): RequestPendingResult {
         if(mainGroup == null){
             getMainGroup()
         }
-
+        lateinit var newGroup: GroupDomain
+        var currentGroupRef: DocumentReference? = null
+        var currentGroupUpdate: Map<String, MutableList<GroupUserDomain?>>? = null
         val userId = sessionManager.getUserId()
-
-        val user = getUserDomain(userId)
-
+        val userDomain = getUserDomain(userId)
         val userGroupDomain = mainGroup!!.users.firstOrNull { it.id == userId}
 
-        val newGroup = getGroupDomain(inviteCode)
-        val groupMutableUsers = newGroup.pendingUsers.toMutableList()
-        val userWithId = groupMutableUsers.firstOrNull { it?.id == userId }
-        if (userWithId != null) {
-            return
+        // Check if group exists
+        try{
+            newGroup = getGroupDomain(inviteCode)
+        } catch (e: Exception){
+            return if(e == DoesNotExist){
+                RequestPendingResult.groupDoesNotExist
+            } else{
+                RequestPendingResult.Error(e.message.toString())
+            }
         }
-        groupMutableUsers.add(userGroupDomain)
-        user.pendingGroupId = newGroup.id
-        val pendingGroupIdMap = mapOf("pendingGroupId" to newGroup.id)
+
+        if(ignoreCurrentPending){
+            val currentPendingGroupId = userDomain.pendingGroupId!!
+            val currentGroup = getGroupDomainById(currentPendingGroupId)
+            val currentGroupPending = currentGroup.pendingUsers.toMutableList()
+            currentGroupPending.remove(userGroupDomain)
+
+            currentGroupRef = firebaseFirestore.collection("groups").document(currentGroup.id!!)
+            currentGroupUpdate = mapOf("pendingUsers" to currentGroupPending)
+        } else{
+            if(userDomain.pendingGroupId != null){
+                return if(userDomain.pendingGroupId == newGroup.id){
+                    RequestPendingResult.alreadyPendingUserInThisGroup
+                } else{
+                    RequestPendingResult.alreadyRequestForAnotherGroup
+                }
+            }
+        }
+
+        val newUserPendingId = newGroup.id!!
+        val userGroupIdUpdate = mapOf("pendingGroupId" to newUserPendingId)
+
+        val groupPendingMutableUsers = newGroup.pendingUsers.toMutableList()
+        groupPendingMutableUsers.add(userGroupDomain)
+        val newGroupUpdatedList = mapOf("pendingUsers" to groupPendingMutableUsers)
+
         val userRef = firebaseFirestore.collection("users").document(userId)
-        val groupRef = firebaseFirestore.collection("groups").document(newGroup.id!!)
-        firebaseFirestore.runBatch {
-            groupRef.update("pendingUsers", groupMutableUsers)
-            userRef.update(pendingGroupIdMap)
+        val newGroupRef = firebaseFirestore.collection("groups").document(newGroup.id!!)
+
+        if(currentGroupRef != null){
+            firebaseFirestore.runBatch {
+                userRef.update(userGroupIdUpdate)
+                newGroupRef.update(newGroupUpdatedList)
+                currentGroupRef.update(currentGroupUpdate!!)
+            }
+            return RequestPendingResult.Success
         }
+
+        firebaseFirestore.runBatch {
+            userRef.update(userGroupIdUpdate)
+            newGroupRef.update(newGroupUpdatedList)
+        }
+        return RequestPendingResult.Success
     }
 
     private fun generateInviteCode(): String {
@@ -295,15 +335,14 @@ internal class GroupRepositoryImpl @Inject constructor(
                     .firstOrNull()!!
                     .toObject(UserDomain::class.java)!!
             } else {
-                throw DoesNotExist("User does not exist")
+                throw DoesNotExist
             }
 
         } catch (e: Exception) {
-            Log.w(TAG, "Error on add user to group, error: ${e.message}")
+            Log.w(TAG, "Error on getUserDomain, error: ${e.message}")
             throw e
         }
     }
-
     companion object{
         const val TAG = "GroupRepository"
     }

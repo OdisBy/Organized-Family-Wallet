@@ -2,6 +2,7 @@ package com.ruliam.organizedfw.core.data.repository
 
 import com.ruliam.organizedfw.core.data.model.GroupDomain
 import com.ruliam.organizedfw.core.data.model.GroupUserDomain
+import com.ruliam.organizedfw.core.data.util.RequestPendingResult
 
 interface GroupRepository {
 
@@ -73,7 +74,9 @@ interface GroupRepository {
     suspend fun hasGroup(): Boolean
 
     /**
+     * Called by user that wants to enter in the group
      * Create a pending user in the group with invite code of param
+     * @param ignoreCurrentPending is true when what to change the pending group
      */
-    suspend fun askEnterGroup(inviteCode: String)
+    suspend fun askEnterGroup(inviteCode: String, ignoreCurrentPending: Boolean = false) : RequestPendingResult
 }

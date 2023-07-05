@@ -124,6 +124,10 @@ class GroupPageFragment : Fragment() {
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collect { dialog ->
                     when(dialog){
+                        is GroupPageViewModel.DialogModel.Success -> {
+                            confirmNewGroup()
+                            viewModel.emptyDialog()
+                        }
                         is GroupPageViewModel.DialogModel.NewGroup -> {
                             confirmNewGroup()
                             viewModel.emptyDialog()
@@ -132,8 +136,21 @@ class GroupPageFragment : Fragment() {
                             openBindUser(dialog.user)
                             viewModel.emptyDialog()
                         }
-
-                        else -> Unit
+                        is GroupPageViewModel.DialogModel.PendingAnotherGroup -> {
+                            pendingAnotherGroup()
+                            viewModel.emptyDialog()
+                        }
+                        is GroupPageViewModel.DialogModel.AlreadyPendingUserInThisGroup -> {
+                            alreadyInGroupDialog()
+                            viewModel.emptyDialog()
+                        }
+                        is GroupPageViewModel.DialogModel.DoesNotExistGroup -> {
+                            doesNotExistDialog()
+                            viewModel.emptyDialog()
+                        }
+                        else -> {
+                            viewModel.emptyDialog()
+                        }
                     }
                 }
         }
@@ -171,10 +188,8 @@ class GroupPageFragment : Fragment() {
             }
             .setPositiveButton("Confirmar") { dialog, which ->
                 viewModel.askForEnterGroup()
-                confirmNewGroupMessageDialog()
             }
             .show()
-
     }
 
     private fun confirmNewGroupMessageDialog() {
@@ -195,6 +210,39 @@ class GroupPageFragment : Fragment() {
             }
             .show()
     }
+
+    private fun pendingAnotherGroup() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Você já pediu para entrar em um grupo")
+            .setMessage("Você já está esperando a resposta de outro grupo, deseja mudar seu pedido para esse grupo?")
+            .setNegativeButton("Cancelar") { dialog, which ->
+            }
+            .setPositiveButton("Confirmar") { dialog, which ->
+                viewModel.changePendingGroup()
+            }
+            .show()
+    }
+
+    private fun doesNotExistDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Esse grupo não existe")
+            .setMessage("Você já está tentando entrar em um grupo que não existe. Por favor verifique o código de convite e tente novamente")
+            .setPositiveButton("Confirmar") { dialog, which ->
+                viewModel.changePendingGroup()
+            }
+            .show()
+    }
+
+    private fun alreadyInGroupDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Você já faz parte desse grupo")
+            .setMessage("Você já está tentando entrar em um grupo que você já pertence")
+            .setPositiveButton("Confirmar") { dialog, which ->
+                viewModel.changePendingGroup()
+            }
+            .show()
+    }
+
 
     private fun bindInviteCode(inviteCode: String) {
         binding.groupInviteCode.text = inviteCode

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.ruliam.organizedfw.core.data.model.GroupUserDomain
 import com.ruliam.organizedfw.core.data.repository.AuthRepository
 import com.ruliam.organizedfw.core.data.repository.GroupRepository
+import com.ruliam.organizedfw.core.data.util.RequestPendingResult
 import com.ruliam.organizedfw.core.data.util.UiStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,7 +57,30 @@ class GroupPageViewModel @Inject constructor(
 
     fun askForEnterGroup() = viewModelScope.launch {
         val inviteCode = state.get<String>("groupInviteCode")
-        groupRepository.askEnterGroup(inviteCode!!)
+        val requestGroup = groupRepository.askEnterGroup(inviteCode!!, false)
+        Log.d(TAG, requestGroup.toString())
+
+        when(requestGroup){
+            is RequestPendingResult.Success -> {
+                _dialogState.value = DialogModel.Success
+            }
+            is RequestPendingResult.alreadyRequestForAnotherGroup -> {
+                _dialogState.value = DialogModel.PendingAnotherGroup
+            }
+            is RequestPendingResult.alreadyPendingUserInThisGroup -> {
+                _dialogState.value = DialogModel.AlreadyPendingUserInThisGroup
+            }
+            is RequestPendingResult.groupDoesNotExist -> {
+                _dialogState.value = DialogModel.DoesNotExistGroup
+            }
+            is RequestPendingResult.Error -> {
+                Log.w(TAG, "Error ${requestGroup.message}")
+            }
+            is RequestPendingResult.userAlreadyInThisGroup -> {
+                return@launch
+            }
+            else -> Unit
+        }
     }
 
     fun getUiState() = viewModelScope.launch {
@@ -98,6 +122,11 @@ class GroupPageViewModel @Inject constructor(
         getUiState()
     }
 
+    fun changePendingGroup() = viewModelScope.launch {
+        val inviteCode = state.get<String>("groupInviteCode")
+        groupRepository.askEnterGroup(inviteCode!!, ignoreCurrentPending = true)
+    }
+
 
     data class UiState(
         val groupInviteCode: String,
@@ -109,6 +138,11 @@ class GroupPageViewModel @Inject constructor(
         data class BindUser(val user: GroupUserDomain) : DialogModel()
         object NewGroup : DialogModel()
         object Empty : DialogModel()
+        object PendingAnotherGroup : DialogModel()
+        object Success : DialogModel()
+        object AlreadyPendingUserInThisGroup : DialogModel()
+
+        object DoesNotExistGroup : DialogModel()
     }
 
     companion object {
