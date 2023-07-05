@@ -12,7 +12,6 @@ internal class UsersRepositoryImpl @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
     private val sessionManager: SessionManager
     ) : UsersRepository {
-
     private suspend fun getFirebaseUser(userId: String) : DocumentSnapshot?{
         return try {
             firebaseFirestore.collection("users")
@@ -32,7 +31,6 @@ internal class UsersRepositoryImpl @Inject constructor(
         val userId = sessionManager.getUserId()
         return firebaseToUserDomain(userId)
     }
-
     override suspend fun getUserById(userId: String): UserDomain? {
         return firebaseToUserDomain(userId)
     }
@@ -46,7 +44,6 @@ internal class UsersRepositoryImpl @Inject constructor(
             0.0
         }
     }
-
     override suspend fun getUserId(): String {
         return sessionManager.getUserId()
     }
@@ -54,8 +51,7 @@ internal class UsersRepositoryImpl @Inject constructor(
     override suspend fun getGroupId(): String {
         return sessionManager.getGroupId() ?: "Unknown error"
     }
-
-    override suspend fun updateNameUser(name: String) {
+    override suspend fun updateUsername(name: String) {
         val userId = sessionManager.getUserId()
         val snapshot = firebaseFirestore.collection("users")
             .document(userId)
@@ -76,8 +72,7 @@ internal class UsersRepositoryImpl @Inject constructor(
             Log.w(TAG, "Error on try to update user balance with id $userId, error: ${e.message}")
         }
     }
-
-companion object {
-    const val TAG = "UsersRepository"
-}
+    companion object {
+        const val TAG = "UsersRepository"
+    }
 }

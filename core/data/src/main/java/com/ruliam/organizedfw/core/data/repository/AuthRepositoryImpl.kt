@@ -98,7 +98,6 @@ internal class AuthRepositoryImpl @Inject constructor(
                 profilePhoto = avatarUri,
                 lastTransaction = null
             )
-
             groupDomain = groupRepository.createGroupDomain(groupUserDomain)
 
             val groupRef: DocumentReference = firebaseFirestore.collection("groups")
@@ -134,49 +133,18 @@ internal class AuthRepositoryImpl @Inject constructor(
             val outputStream = ByteArrayOutputStream()
             avatar.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
             var data = outputStream.toByteArray()
-            // TODO CHECK IF CAN BE A LOWER VALUE
             while (data.size > 15000) {
                 quality -= 5
                 outputStream.reset()
                 avatar.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
                 data = outputStream.toByteArray()
             }
-
             return avatarRepository.addAvatarToFirestore(userId, data)
         } catch (e: Exception) {
             Log.w(TAG, "Error on update avatar ${e.message.toString()}")
             throw e
         }
     }
-
-//    private fun handleUserExists(userId: String, continuation: CancellableContinuation<SignInResult>) {
-//
-//        firebaseFirestore.collection("users")
-//            .document(userId)
-//            .get()
-//            .addOnCompleteListener { task ->
-//                val exists = task.isSuccessful && document != null && document.exists()
-//                if(exists) {
-//                    val user = sessionManager.documentToUserDomain(task.result)
-//                    SignInResult.Success(user.id, user.groupId)
-//                } else {
-//                    SignInResult.AccountNotCompleted
-//                }
-//                continuation.resume(result)
-//            }
-
-
-
-//        userExists(userId) { exists ->
-//            val result = if (exists) {
-//                SignInResult.Success(userId)
-//            } else {
-//                SignInResult.AccountNotCompleted
-//            }
-//            continuation.resume(result)
-//        }
-//    }
-
     private fun handleUserExists(userId: String, continuation: CancellableContinuation<SignInResult>) {
         firebaseFirestore.collection("users")
             .document(userId)
@@ -196,22 +164,6 @@ internal class AuthRepositoryImpl @Inject constructor(
                 continuation.resume(exceptionMessage)
             }
     }
-
-
-//    private fun userExists(userId: String, callback: (Boolean) -> Unit) {
-//        firebaseFirestore.collection("users")
-//            .document(userId)
-//            .get()
-//            .addOnCompleteListener { task ->
-//                val document = task.result
-//                val exists = task.isSuccessful && document != null && document.exists()
-//                if(exists) {
-//                    val user = sessionManager.documentToUserDomain(task.result)
-//                } else {
-//                    callback(false)
-//                }
-//            }
-//    }
 
     private fun handleLoginError(error: Exception?, continuation: CancellableContinuation<SignInResult>) {
         Log.w(TAG, error.toString())

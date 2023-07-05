@@ -9,16 +9,16 @@ import com.ruliam.organizedfw.core.data.model.UserDomain
 import com.ruliam.organizedfw.core.data.session.SessionManager
 import com.ruliam.organizedfw.core.data.util.FinanceRepositoryException
 import kotlinx.coroutines.tasks.await
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.UUID
 import javax.inject.Inject
-import kotlin.collections.HashMap
 
 internal class FinanceRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val sessionManager: SessionManager
 ) :
     FinanceRepository {
-
     override suspend fun fetchAllByUser(userId: UUID): List<TransactionDomain> {
         val finances = mutableListOf<TransactionDomain>()
         val query = firestore.collection("transactions")
@@ -38,13 +38,10 @@ internal class FinanceRepositoryImpl @Inject constructor(
         return finances
     }
 
-
     override suspend fun fetchMonthByUser(month: Long, userId: String): List<TransactionDomain> {
         TODO("Not yet implemented")
     }
-
     override suspend fun fetchGroupFinancesByMonth(month: Int): List<TransactionDomain> {
-
         val rangeCalendar = Calendar.getInstance()
         rangeCalendar.add(Calendar.MONTH, -1)
 
@@ -91,8 +88,6 @@ internal class FinanceRepositoryImpl @Inject constructor(
 
         return transaction.documents.firstOrNull()?.toObject(TransactionDomain::class.java)
     }
-
-
     override suspend fun add(
         name: String,
         date: Date,
@@ -113,7 +108,6 @@ internal class FinanceRepositoryImpl @Inject constructor(
             recurrent = recurrent
         )
 
-
         val transactionRef = firestore
             .collection("groups").document(groupId)
             .collection("transactions").document(finance.id)
@@ -122,11 +116,9 @@ internal class FinanceRepositoryImpl @Inject constructor(
             .collection("groups")
             .document(groupId)
 
-
         val groupObject = groupRef.get()
             .await()
             .toObject(GroupDomain::class.java)
-
 
         val userRef = firestore.collection("users").document(userId)
 
@@ -150,7 +142,6 @@ internal class FinanceRepositoryImpl @Inject constructor(
             throw FinanceRepositoryException("Failed to add finance or update balance, error ${e.message.toString()}", e)
         }
     }
-
     companion object {
         private const val TAG = "FinanceRepository"
     }

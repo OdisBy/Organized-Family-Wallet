@@ -19,7 +19,6 @@ internal class GroupRepositoryImpl @Inject constructor(
     private val sessionManager: SessionManager,
     private val firebaseFirestore: FirebaseFirestore
 ) : GroupRepository {
-
     private var mainGroup: GroupDomain? = null
 
     private suspend fun getMainGroup() {

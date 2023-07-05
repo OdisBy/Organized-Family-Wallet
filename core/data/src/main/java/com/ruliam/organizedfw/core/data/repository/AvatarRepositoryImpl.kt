@@ -22,9 +22,7 @@ internal class AvatarRepositoryImpl @Inject constructor(
     private val userAvatar: UserAvatar,
     @ApplicationContext private val context: Context
 ) : AvatarRepository {
-
     private val storage = firebaseStorage.reference
-
     private val ONE_MEGABYTE: Long = 1024 * 1024
 
     override suspend fun addAvatarToFirestore(userId: String, bitmap: ByteArray): Uri {
@@ -63,7 +61,6 @@ internal class AvatarRepositoryImpl @Inject constructor(
 
         return null
     }
-
     override suspend fun generateAvatar(username: String): Bitmap {
         return userAvatar.generateUserAvatar(username)
     }
@@ -80,8 +77,6 @@ internal class AvatarRepositoryImpl @Inject constructor(
             throw Exception("Can't get avatar image")
         }
     }
-
-
     companion object{
         private const val TAG = "AvatarRepository"
     }
