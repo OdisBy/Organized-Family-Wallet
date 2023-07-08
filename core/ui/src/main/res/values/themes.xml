@@ -16,7 +16,7 @@
 
         <!-- Use windowSplashScreenAnimatedIcon to add either a drawable or an
              animated drawable. One of these is required. -->
-        <item name="windowSplashScreenAnimatedIcon">@drawable/icon_organized</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splashscreen</item>
 
         <!-- Set the theme of the Activity that directly follows your splash screen. -->
         <!-- Required -->
