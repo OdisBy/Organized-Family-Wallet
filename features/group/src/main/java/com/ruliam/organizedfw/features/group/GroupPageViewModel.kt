@@ -30,8 +30,6 @@ class GroupPageViewModel @Inject constructor(
     private val _dialogState = MutableStateFlow<DialogModel>(DialogModel.Empty)
     val dialogState: StateFlow<DialogModel> = _dialogState
 
-//    var shouldOpenDialog: Boolean = false
-
     fun isLogged() = viewModelScope.launch {
         _signInState.value = authRepository.checkLogin()
     }
