@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Organized" parent="Theme.Material3.DayNight">
+    <style name="Theme.Organized" parent="Theme.Material3.Light">
         <item name="colorAccent">@color/colorSecondary</item>
         <item name="bottomSheetDialogTheme">@style/Widget.Organized.BottomSheet</item>
         <!--Remove default actionbar-->
