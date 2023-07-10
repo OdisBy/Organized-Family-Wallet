@@ -3,10 +3,10 @@ package com.ruliam.organizedfw.features.login.login_screen
 import PermissionManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -53,17 +53,12 @@ class LoginFragment : Fragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissionManager
                 .request(Permission.Notification)
-                .rationale("We need permission to show Notifications")
+                .rationale(getString(com.ruliam.organizedfw.features.login.R.string.notification_permission_text))
                 .checkPermission { granted: Boolean ->
                     if (granted) {
-                        Toast.makeText(requireContext(), "Permission Granted", Toast.LENGTH_SHORT)
-                            .show()
+                        Log.d(TAG, "Permission granted")
                     } else {
-                        Toast.makeText(
-                            requireContext(),
-                            "No Permission to show notifications",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Log.d(TAG, "Permission not granted")
                     }
                 }
         }

@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
@@ -25,7 +26,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        Log.d(TAG, "onmessageReceivedCalled")
+        Log.d(TAG, "Received notification")
         if (tiramisuPermissionsCheck()) {
             generateNotification(remoteMessage.notification!!.title!!, remoteMessage.notification!!.body!!)
         }
@@ -49,7 +50,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(message)
-            .setSmallIcon(R.mipmap.ic_launcher_round)
+            .setLargeIcon(BitmapFactory.decodeResource(applicationContext.resources, R.drawable.ic_organized))
+            .setSmallIcon(R.drawable.ic_organized)
+            .setColor(Color.BLACK)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .build()
@@ -59,16 +62,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun tiramisuPermissionsCheck(): Boolean {
-        Log.d(TAG, "tiramisuPermissionCheckCalled")
         // If we are above level 33, check permissions
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            Log.d(TAG, "tiramisuPermissionCheckCalled First if")
             ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
         } else {
-            Log.d(TAG, "tiramisuPermissionCheckCalled returned true")
             true
         }
     }
