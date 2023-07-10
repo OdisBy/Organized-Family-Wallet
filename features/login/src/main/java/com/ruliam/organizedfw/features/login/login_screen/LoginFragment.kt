@@ -1,9 +1,12 @@
 package com.ruliam.organizedfw.features.login.login_screen
 
+import PermissionManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -19,6 +22,7 @@ import com.ruliam.organizedfw.core.ui.R
 import com.ruliam.organizedfw.features.login.databinding.FragmentLoginBinding
 import com.ruliam.organizedfw.features.login.utils.InputResource
 import com.ruliam.organizedfw.features.login.utils.LoginUtil
+import com.ruliam.organizedfw.utils.permissions.Permission
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -32,6 +36,7 @@ class LoginFragment : Fragment() {
 
     private lateinit var savedStateHandle: SavedStateHandle
 
+    private val permissionManager = PermissionManager.from(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +49,25 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionManager
+                .request(Permission.Notification)
+                .rationale("We need permission to show Notifications")
+                .checkPermission { granted: Boolean ->
+                    if (granted) {
+                        Toast.makeText(requireContext(), "Permission Granted", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "No Permission to show notifications",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+        }
+
         return binding.root
     }
 
