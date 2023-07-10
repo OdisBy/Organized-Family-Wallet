@@ -3,6 +3,7 @@ package com.ruliam.organizedfw.core.data.di
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.ktx.storage
 import dagger.Module
 import dagger.Provides
@@ -25,4 +26,8 @@ internal object DatabaseModule {
     @Singleton
     @Provides
     fun providesFirebaseStorage() = Firebase.storage
+
+    @Singleton
+    @Provides
+    fun providesFirebaseMessaging() = FirebaseMessaging.getInstance()
 }

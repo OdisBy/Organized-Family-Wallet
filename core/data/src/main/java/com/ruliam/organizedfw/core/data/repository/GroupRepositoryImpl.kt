@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.ruliam.organizedfw.core.data.model.GroupDomain
 import com.ruliam.organizedfw.core.data.model.GroupUserDomain
 import com.ruliam.organizedfw.core.data.model.UserDomain
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 internal class GroupRepositoryImpl @Inject constructor(
     private val sessionManager: SessionManager,
-    private val firebaseFirestore: FirebaseFirestore
+    private val firebaseFirestore: FirebaseFirestore,
+    private val firebaseMessaging: FirebaseMessaging
 ) : GroupRepository {
     private var mainGroup: GroupDomain? = null
 
@@ -182,6 +184,25 @@ internal class GroupRepositoryImpl @Inject constructor(
                     newGroupRef.update(newGroupMap)
                 }
             }
+
+            firebaseMessaging.unsubscribeFromTopic(oldGroup.id!!)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "Unsubscribe from old group success")
+                    } else {
+                        Log.e(TAG, "Unsubscribe from old group success failed", task.exception)
+                    }
+                }
+            firebaseMessaging.subscribeToTopic(oldGroup.id!!)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "Subscribe on group topic success")
+                    } else {
+                        Log.e(TAG, "Subscribe on group topic failed", task.exception)
+                    }
+                }
+
+
 
             getMainGroup()
         } catch (e: Exception){

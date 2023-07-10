@@ -25,6 +25,7 @@ dependencies {
     implementation libs.firebase.firestore
     implementation libs.firebase.storage
     implementation libs.glide
+    implementation libs.firebase.messaging.ktx
     kapt libs.hilt.compiler
 
     // TODO REMOVER

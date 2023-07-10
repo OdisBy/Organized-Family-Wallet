@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.ruliam.organizedfw.core.data.model.GroupDomain
 import com.ruliam.organizedfw.core.data.model.GroupUserDomain
 import com.ruliam.organizedfw.core.data.model.UserDomain
@@ -26,7 +27,8 @@ internal class AuthRepositoryImpl @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
     private val sessionManager: SessionManager,
     private val groupRepository: GroupRepository,
-    private val avatarRepository: AvatarRepository
+    private val avatarRepository: AvatarRepository,
+    private val firebaseMessaging: FirebaseMessaging
 ) : AuthRepository {
     override suspend fun loginUserWithEmailAndPassword(email: String, password: String): SignInResult = suspendCancellableCoroutine { continuation ->
         firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -116,6 +118,15 @@ internal class AuthRepositoryImpl @Inject constructor(
             if(!groupInvite.isNullOrEmpty()){
                 groupRepository.askEnterGroup(groupInvite)
             }
+
+            firebaseMessaging.subscribeToTopic(groupDomain.id!!)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(GroupRepositoryImpl.TAG, "Subscribe on group topic success")
+                    } else {
+                        Log.e(GroupRepositoryImpl.TAG, "Subscribe on group topic failed", task.exception)
+                    }
+                }
             return userDomain
         } catch (e: Exception){
             Log.w(TAG, "Error on create user and group: ${e.message.toString()}")

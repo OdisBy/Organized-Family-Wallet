@@ -21,7 +21,7 @@ interface AuthRepository {
     suspend fun checkLogin(): Boolean
 
     /**
-     * Create an user and add it automatically in a group
+     * Create an user and add it automatically in a group and subscribe to topic in fcm
      * @param groupInvite if has groupInvite the user will be marked as pendent in the group
      */
     suspend fun createUserAndAddToGroup(
