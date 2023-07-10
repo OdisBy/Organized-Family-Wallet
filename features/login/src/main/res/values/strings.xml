@@ -26,7 +26,4 @@
     <string name="username_tooltip">Nome que será mostrado aos usuários do grupo</string>
     <string name="invite_code_tooltip">Caso queira entrar em um grupo adicione o código de convite do grupo</string>
     <string name="avatar_tooltip">Foto do perfil</string>
-
-
-    <string name="notification_permission_text">Precisamos da sua permissão para enviar notificações sobre o aplicativo</string>
 </resources>

@@ -1,9 +1,15 @@
 package com.ruliam.organizedfw.features.home
 
+import PermissionManager
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.ContextThemeWrapper
+import android.view.LayoutInflater
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.net.toUri
@@ -13,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
@@ -24,6 +29,7 @@ import com.ruliam.organizedfw.core.data.util.UiStateFlow
 import com.ruliam.organizedfw.features.home.databinding.FragmentHomeBinding
 import com.ruliam.organizedfw.features.home.model.BalanceCardItem
 import com.ruliam.organizedfw.features.home.model.ListItemType
+import com.ruliam.organizedfw.utils.permissions.Permission
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -40,6 +46,8 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeFragmentViewModel
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+
+    private val permissionManager = PermissionManager.from(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +80,20 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomInclude.bottomSheet)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionManager
+                .request(Permission.Notification)
+                .rationale(getString(R.string.notification_permission_text))
+                .checkPermission { granted: Boolean ->
+                    if (granted) {
+                        Log.d(TAG, "Permission granted")
+                    } else {
+                        Log.d(TAG, "Permission not granted")
+                    }
+                }
+        }
+
         return binding.root
     }
 
