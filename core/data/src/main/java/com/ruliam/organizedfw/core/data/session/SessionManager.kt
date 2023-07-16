@@ -61,6 +61,10 @@ internal class SessionManager @Inject constructor(
         return user.toObject(UserDomain::class.java) ?: throw Exception("Cant transform documentSnapshot to UserDomain")
     }
 
+    fun setGroupId(groupId: String) {
+        sharedPreferences.edit().putString(GROUP_ID, groupId).apply()
+    }
+
 //    suspend fun getMainUser(): UserDomain {
 //        val userId = getUserId()
 //        val result = firebaseFirestore.collection("users")

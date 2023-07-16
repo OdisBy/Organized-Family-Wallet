@@ -28,7 +28,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
         Log.d(TAG, "Received notification")
         if (tiramisuPermissionsCheck()) {
-            generateNotification(remoteMessage.notification!!.title!!, remoteMessage.notification!!.body!!)
+            generateNotification(remoteMessage.data["title"]!!, remoteMessage.data["message"]!!)
         }
     }
 

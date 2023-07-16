@@ -14,7 +14,11 @@ internal class UsersRepositoryImpl @Inject constructor(
     ) : UsersRepository {
     override suspend fun getMainUser(): UserDomain? {
         val userId = sessionManager.getUserId()
-        return firebaseToUserDomain(userId)
+        val user = firebaseToUserDomain(userId)
+        if(user != null){
+            sessionManager.setGroupId(user.groupId)
+        }
+        return user
     }
     override suspend fun getUserById(userId: String): UserDomain? {
         return firebaseToUserDomain(userId)

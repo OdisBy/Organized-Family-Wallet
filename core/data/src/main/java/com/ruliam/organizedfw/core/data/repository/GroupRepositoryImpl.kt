@@ -7,7 +7,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import com.ruliam.organizedfw.core.data.model.GroupDomain
 import com.ruliam.organizedfw.core.data.model.GroupUserDomain
+import com.ruliam.organizedfw.core.data.model.NotificationData
+import com.ruliam.organizedfw.core.data.model.PushNotification
 import com.ruliam.organizedfw.core.data.model.UserDomain
+import com.ruliam.organizedfw.core.data.network.ApiManager
 import com.ruliam.organizedfw.core.data.session.SessionManager
 import com.ruliam.organizedfw.core.data.util.CanNotAddFirebase
 import com.ruliam.organizedfw.core.data.util.DoesNotExist
@@ -19,10 +22,10 @@ import javax.inject.Inject
 internal class GroupRepositoryImpl @Inject constructor(
     private val sessionManager: SessionManager,
     private val firebaseFirestore: FirebaseFirestore,
-    private val firebaseMessaging: FirebaseMessaging
+    private val firebaseMessaging: FirebaseMessaging,
+    private val apiManager: ApiManager
 ) : GroupRepository {
     private var mainGroup: GroupDomain? = null
-
     private suspend fun getMainGroup() {
         val groupId = getUserGroupId()
         try {
@@ -193,16 +196,15 @@ internal class GroupRepositoryImpl @Inject constructor(
                         Log.e(TAG, "Unsubscribe from old group success failed", task.exception)
                     }
                 }
-            firebaseMessaging.subscribeToTopic(oldGroup.id!!)
+            firebaseMessaging.subscribeToTopic(newGroup.id!!)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d(TAG, "Subscribe on group topic success")
                     } else {
                         Log.e(TAG, "Subscribe on group topic failed", task.exception)
                     }
-                }
-
-
+                }.await()
+            sendMessageAboutNewUser(user, newGroup)
 
             getMainGroup()
         } catch (e: Exception){
@@ -306,6 +308,30 @@ internal class GroupRepositoryImpl @Inject constructor(
             newGroupRef.update(newGroupUpdatedList)
         }
         return RequestPendingResult.Success
+    }
+
+    private suspend fun sendMessageToNewUser(user: GroupUserDomain) {
+        val title = "Você está em um novo grupo"
+        val message = "Parabéns, agora você faz parte de um novo grupo!"
+        val notification = PushNotification(
+            NotificationData(title, message),
+            to = user.id
+        )
+        sendNotification(notification)
+    }
+
+    private suspend fun sendMessageAboutNewUser(user: GroupUserDomain, groupDomain: GroupDomain) {
+        val title = "Novo usuário em seu grupo"
+        val message = "Agora ${user.username} faz parte do grupo!"
+        val notification = PushNotification(
+            NotificationData(title, message),
+            to = "/topics/${groupDomain.id!!}"
+        )
+        sendNotification(notification)
+    }
+
+    private suspend fun sendNotification(notification: PushNotification) {
+        apiManager.postNotification(notification)
     }
 
     private fun generateInviteCode(): String {
