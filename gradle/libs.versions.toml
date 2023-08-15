@@ -6,17 +6,17 @@ hiltVersion = "2.46.1"
 javaxAnnotationApiVersion = "1.3.2"
 legacySupportV4Version = "1.0.0"
 lifecycleLivedataKtxVersion = "2.6.1"
-roomVersion = "2.5.1"
-firebaseBoMVersion = "32.1.1"
+roomVersion = "2.5.2"
+firebaseBoMVersion = "32.2.2"
 firebaseAnalyticsVersion = "21.3.0"
-firebaseAuthVersion = "22.0.0"
-firebaseFirestore = "24.6.1"
+firebaseAuthVersion = "22.1.1"
+firebaseFirestore = "24.7.0"
 firebaseStorage = "20.2.1"
-firebaseMessagingVersion = "23.1.2"
+firebaseMessagingVersion = "23.2.1"
 
 # AndroidX
 datastoreVersion = "1.0.0"
-androidXNavigationVersion = "2.6.0"
+androidXNavigationVersion = "2.7.0"
 androidXAppcompatVersion = "1.6.1"
 androidXConstraintlayoutVersion = "2.1.4"
 androidXCoreVersion = "1.10.1"
@@ -24,7 +24,7 @@ androidXTestCoreVersion = "1.5.0"
 androidXEspressoVersion = "3.5.1"
 androidXTestJunitVersion = "1.1.5"
 cardViewVersion = "1.0.0"
-androidXPreference = "1.2.0"
+androidXPreference = "1.2.1"
 androidXSplashScreen = "1.0.1"
 
 
@@ -42,14 +42,14 @@ mockitoKotlinVersion = "4.1.0"
 mockkVersion = "1.13.5"
 mockitoAndroidVersion = "3.2.4"
 googleTruthVersion = "1.1.3"
-fragmentTestVersion = "1.6.0"
+fragmentTestVersion = "1.6.1"
 
 # Design
 androidMaterialVersion = "1.9.0"
 
 # Android
-gradleVersion = "8.0.2"
-kotlinVersion = "1.8.10"
+gradleVersion = "8.1.0"
+kotlinVersion = "1.8.21"
 
 # Api
 okhttpVersion = "4.11.0"

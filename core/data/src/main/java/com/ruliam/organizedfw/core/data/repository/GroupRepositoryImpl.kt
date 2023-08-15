@@ -171,7 +171,6 @@ internal class GroupRepositoryImpl @Inject constructor(
             val newGroupRef = firebaseFirestore.collection("groups").document(newGroup.id!!)
             val userRef = firebaseFirestore.collection("users").document(user.id)
 
-
             if(usersOldGroup.isEmpty()) {
                 firebaseFirestore.runBatch {
                     userRef.update(userDomainMap)
