@@ -12,6 +12,11 @@ android {
     defaultConfig {
         minSdk rootProject.ext.minVersion
         targetSdk rootProject.ext.targetVersion
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+        buildConfigField "String", "FIREBASE_MESSAGING_API_KEY", "\"${properties.getProperty("FIREBASE_MESSAGING_API_KEY")}\""
     }
     
     buildFeatures {
